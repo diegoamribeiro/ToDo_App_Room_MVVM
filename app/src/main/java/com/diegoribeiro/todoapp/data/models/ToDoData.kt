@@ -1,4 +1,4 @@
-package com.diegoribeiro.todoapp.data
+package com.diegoribeiro.todoapp.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
