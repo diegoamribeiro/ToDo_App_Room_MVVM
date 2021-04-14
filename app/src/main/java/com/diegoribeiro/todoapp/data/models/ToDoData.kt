@@ -2,6 +2,7 @@ package com.diegoribeiro.todoapp.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "todo_table")
 data class ToDoData(
