@@ -1,14 +1,12 @@
 package com.diegoribeiro.todoapp.fragments.add
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.diegoribeiro.todoapp.R
-import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
@@ -54,7 +52,7 @@ class AddFragment : Fragment() {
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
         if (validation){
             val newData = ToDoData(0, mTitle, mSharedViewModel
-                    .parsePriority(mPriority), mDescription)
+                    .parseStringToPriority(mPriority), mDescription)
             mToDoViewModel.insert(newData)
             Toast.makeText(requireContext(), "Saved Successfully", Toast.LENGTH_SHORT).show()
         }else{

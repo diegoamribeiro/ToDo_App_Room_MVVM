@@ -12,7 +12,6 @@ import com.diegoribeiro.todoapp.data.models.Priority
 
 class SharedViewModel(application: Application) : AndroidViewModel(application){
 
-
     val listener: AdapterView.OnItemSelectedListener =  object : AdapterView.OnItemSelectedListener{
         override fun onNothingSelected(parent: AdapterView<*>?) {}
 
@@ -22,15 +21,23 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
                 1 -> {(parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.yellow))}
                 2 -> {(parent?.getChildAt(0) as TextView).setTextColor(ContextCompat.getColor(application, R.color.green))}
             }
-    }
+        }
     }
 
-    fun parsePriority(priority: String): Priority {
+    fun parseStringToPriority(priority: String): Priority {
         return when(priority){
             "High Priority" -> {Priority.HIGH}
             "Medium Priority" -> {Priority.MEDIUM}
             "Low Priority" -> {Priority.LOW}
             else -> Priority.LOW
+        }
+    }
+
+    fun parsePriorityToInt(priority: Priority): Int {
+        return when (priority) {
+            Priority.HIGH -> 0
+            Priority.MEDIUM -> 1
+            Priority.LOW -> 2
         }
     }
 
