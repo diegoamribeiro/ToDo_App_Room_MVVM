@@ -31,7 +31,6 @@ class UpdateFragment : Fragment() {
         view.current_description_et.setText(args.currentItem.description)
         view.current_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         view.current_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
-
         return view
     }
 

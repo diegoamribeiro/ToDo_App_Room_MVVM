@@ -8,6 +8,8 @@ class ToDoRepository(private val toDoDao: ToDoDao) {
 
     val getAllData: LiveData<List<ToDoData>> = toDoDao.getAllData()
 
+    suspend fun deleteAll() =  toDoDao.deleteAll()
+
     suspend fun insert(toDoData: ToDoData){
         toDoDao.insertData(toDoData)
     }
@@ -19,6 +21,8 @@ class ToDoRepository(private val toDoDao: ToDoDao) {
     suspend fun deleteData(toDoData: ToDoData){
         toDoDao.deleteData(toDoData)
     }
+
+
     
     
 

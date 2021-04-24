@@ -1,4 +1,4 @@
-package com.diegoribeiro.todoapp.data.models
+package com.diegoribeiro.todoapp.fragments.list.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,9 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.diegoribeiro.todoapp.R
+import com.diegoribeiro.todoapp.data.models.Priority
+import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
-import com.diegoribeiro.todoapp.fragments.update.UpdateFragmentDirections
 import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
