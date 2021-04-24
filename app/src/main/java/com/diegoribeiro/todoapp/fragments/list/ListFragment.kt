@@ -7,11 +7,11 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
@@ -40,7 +40,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         val recyclerView = view.recyclerListView
         recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.itemAnimator = SlideInUpAnimator().apply {
             addDuration = 300
         }
@@ -68,20 +68,19 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 mToDoViewModel.deleteItem(itemToDelete)
                 mAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 Toast.makeText(requireContext(), "Successfully removed '${itemToDelete.title}'", Toast.LENGTH_SHORT).show()
-                restoreDeletedItem(viewHolder.itemView, itemToDelete, viewHolder.adapterPosition)
+                restoreDeletedItem(viewHolder.itemView, itemToDelete)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun restoreDeletedItem(view: View, deletedItem: ToDoData, position: Int){
+    private fun restoreDeletedItem(view: View, deletedItem: ToDoData){
         val snackBar = Snackbar.make(
                 view, "Deleted '${deletedItem.title}'", Snackbar.LENGTH_SHORT
         )
         snackBar.setAction("Undo"){
             mToDoViewModel.insert(deletedItem)
-            mAdapter.notifyItemChanged(position)
         }
         snackBar.show()
     }
