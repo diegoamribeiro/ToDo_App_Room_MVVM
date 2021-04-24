@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -17,18 +18,19 @@ import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.google.android.material.snackbar.Snackbar
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mAdapter: ListAdapter by lazy { ListAdapter() }
-    private val toDoViewModel: ToDoViewModel by viewModels()
+    private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_list, container, false)
 
@@ -39,9 +41,12 @@ class ListFragment : Fragment() {
         val recyclerView = view.recyclerListView
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.itemAnimator = SlideInUpAnimator().apply {
+            addDuration = 300
+        }
         swipeToDelete(recyclerView)
 
-        toDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
             mSharedViewModel.verifyEmptyList(data)
             mAdapter.setData(data)
         })
@@ -60,7 +65,7 @@ class ListFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = mAdapter.dataList[viewHolder.adapterPosition]
-                toDoViewModel.deleteItem(itemToDelete)
+                mToDoViewModel.deleteItem(itemToDelete)
                 mAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 Toast.makeText(requireContext(), "Successfully removed '${itemToDelete.title}'", Toast.LENGTH_SHORT).show()
                 restoreDeletedItem(viewHolder.itemView, itemToDelete, viewHolder.adapterPosition)
@@ -71,17 +76,15 @@ class ListFragment : Fragment() {
     }
 
     private fun restoreDeletedItem(view: View, deletedItem: ToDoData, position: Int){
-        val snackbar = Snackbar.make(
+        val snackBar = Snackbar.make(
                 view, "Deleted '${deletedItem.title}'", Snackbar.LENGTH_SHORT
         )
-        snackbar.setAction("Undo"){
-            toDoViewModel.insert(deletedItem)
+        snackBar.setAction("Undo"){
+            mToDoViewModel.insert(deletedItem)
             mAdapter.notifyItemChanged(position)
         }
-        snackbar.show()
-
+        snackBar.show()
     }
-
 
     private fun showEmptyDatabaseView(emptyDatabase: Boolean) {
         if (emptyDatabase){
@@ -100,10 +103,35 @@ class ListFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null){
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null){
+            searchThroughDatabase(newText)
+        }
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String){
+        val searchQuery = "%$query%"
+
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, { list ->
+            list?.let {
+                mAdapter.setData(it)
+            }
+        })
+
+    }
+
     private fun confirmRemoval(){
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setPositiveButton("Yes"){_,_ ->
-            toDoViewModel.deleteAll()
+            mToDoViewModel.deleteAll()
             Toast.makeText(requireContext(), "All items Removed!", Toast.LENGTH_SHORT).show()
         }
         dialog.setNegativeButton("No"){_, _, ->}
@@ -115,6 +143,9 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
-
 }

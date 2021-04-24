@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
@@ -42,8 +43,10 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
     }
 
     fun setData(toDoList: List<ToDoData>){
+        val toDoDiffUtil = ToDoDiffUtil(dataList, toDoList)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         this.dataList = toDoList
-        notifyDataSetChanged()
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 
 

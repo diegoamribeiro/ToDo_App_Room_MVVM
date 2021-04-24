@@ -47,5 +47,9 @@ class ToDoViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun searchDatabase(searchQuery: String): LiveData<List<ToDoData>>{
+        return repository.searchDatabase(searchQuery)
+    }
+
 
 }
