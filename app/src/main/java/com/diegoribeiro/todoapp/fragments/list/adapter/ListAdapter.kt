@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
 
-    private var dataList = emptyList<ToDoData>()
+    var dataList = emptyList<ToDoData>()
    // private var currentItem = UpdateFragmentDirections
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
