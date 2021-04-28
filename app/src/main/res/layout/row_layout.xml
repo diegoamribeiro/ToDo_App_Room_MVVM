@@ -19,8 +19,8 @@
 
         <TextView
             android:id="@+id/title_txt"
-            android:layout_width="320dp"
-            android:layout_height="21dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
@@ -28,8 +28,7 @@
             android:textColor="@color/darkGray"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toStartOf="@+id/priority_indicator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

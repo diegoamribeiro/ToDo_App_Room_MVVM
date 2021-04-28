@@ -39,7 +39,6 @@ class AddFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_add){
             insertDataToDatabase()
-            findNavController().navigate(R.id.action_addFragment_to_listFragment)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -54,6 +53,7 @@ class AddFragment : Fragment() {
             val newData = ToDoData(0, mTitle, mSharedViewModel
                     .parseStringToPriority(mPriority), mDescription)
             mToDoViewModel.insert(newData)
+            findNavController().navigate(R.id.action_addFragment_to_listFragment)
             Toast.makeText(requireContext(), "Saved Successfully", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
