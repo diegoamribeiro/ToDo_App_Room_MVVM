@@ -4,7 +4,7 @@
 
 # About
 
-Link Playstore: Waiting approval by Google...
+Link Playstore: https://play.google.com/store/apps/details?id=com.diegoribeiro.todoapp
 
 This app was developed during an android kotlin course with clean architecture.
 It was possible to apply several technologies of Jetpack.
