@@ -73,7 +73,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 val itemToDelete = listAdapter.dataList[viewHolder.adapterPosition]
                 mToDoViewModel.deleteItem(itemToDelete)
                 listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
-                Toast.makeText(requireContext(), "Successfully removed '${itemToDelete.title}'", Toast.LENGTH_SHORT).show()
                 restoreDeletedItem(viewHolder.itemView, itemToDelete)
             }
         }
@@ -137,13 +136,13 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun confirmRemoval(){
         val dialog = AlertDialog.Builder(requireContext())
-        dialog.setPositiveButton("Yes"){_,_ ->
+        dialog.setPositiveButton(R.string.yes){_,_ ->
             mToDoViewModel.deleteAll()
-            Toast.makeText(requireContext(), "All items Removed!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.all_items_removed, Toast.LENGTH_SHORT).show()
         }
-        dialog.setNegativeButton("No"){_, _, ->}
-        dialog.setTitle("Confirm removal")
-        dialog.setMessage("Are you sure delete All?")
+        dialog.setNegativeButton(R.string.no){_, _, ->}
+        dialog.setTitle(R.string.confirm_removal)
+        dialog.setMessage(R.string.are_you_sure_all)
         dialog.create()
         dialog.show()
     }

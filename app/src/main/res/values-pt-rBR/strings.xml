@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">To-DoApp Lista</string>
+    <!--    Toolbar-->
+    <string name="add_fragment">Adicionar</string>
+    <string name="update_fragment">Atualizar</string>
+
+    <string name="no_data">Sem Dados</string>
+    <string name="add_button">add_button</string>
+    <string name="search">Buscar</string>
+    <string name="sort_by">Filtrar</string>
+    <string name="priority_high">Alta</string>
+    <string name="priority_low">Baixa</string>
+    <string name="priority_medium">Média</string>
+    <string name="delete_all">Deletar Tudo</string>
+    <string name="add">Adicionar</string>
+    <string name="save">Salvar</string>
+    <string name="delete">Deletar</string>
+    <string name="title">Título</string>
+    <string name="description">Descrição</string>
+    <string-array name="priorities">
+        <item>Prioridade Alta</item>
+        <item>Prioridade Média</item>
+        <item>Prioridade Baixa</item>
+    </string-array>
+    <!--    Delete task -->
+    <string name="confirm_removal">Confirmar remoção</string>
+    <string name="are_you_sure">Tem certeza que deseja deletar </string>
+    <string name="are_you_sure_all">Tem certeza que deseja deletar tudo?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="removed">Removido!</string>
+    <string name="deleted">Deletado</string>
+    <string name="undo">Desfazer</string>
+    <!-- Update and save -->
+    <string name="updated_successfully">Atualizado com sucesso!</string>
+    <string name="saved_successfully">Salvo com sucesso!</string>
+    <string name="all_items_removed">Todos os itens foram removidos</string>
+    <!--"Please fill all fields"-->
+    <string name="please_fill_all_fields">Por favor, preencha todos os campos</string>
+</resources>

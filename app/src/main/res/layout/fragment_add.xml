@@ -12,14 +12,15 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:hint="@string/title"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:background="@drawable/custom_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
     <Spinner
         android:id="@+id/priorities_spinner"
@@ -41,7 +42,7 @@
         android:hint="@string/description"
         android:background="@drawable/custom_input"
         android:ems="10"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textCapSentences"
         android:gravity="top|start"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
@@ -50,5 +51,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner"
+        android:autofillHints="" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">ToDoApp</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_data">No Data</string>
+    <string name="add_fragment">Add</string>
+    <string name="update_fragment">Update</string>
     <string name="add_button">add_button</string>
     <string name="search">Search</string>
     <string name="sort_by">Sort By</string>
@@ -20,4 +21,19 @@
         <item>Medium Priority</item>
         <item>Low Priority</item>
     </string-array>
+    <!--    Delete task -->
+    <string name="confirm_removal">Confirm removal</string>
+    <string name="are_you_sure">Are you sure delete</string>
+    <string name="are_you_sure_all">"Are you sure delete All?"</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="removed">Removed!</string>
+    <string name="deleted">Deleted!</string>
+    <string name="undo">Undo</string>
+    <!-- Update and save -->
+    <string name="updated_successfully">Updated successfully!</string>
+    <string name="saved_successfully">Saved successfully!</string>
+    <string name="all_items_removed">All items Removed!</string>
+    <!--"Please fill all fields"-->
+    <string name="please_fill_all_fields">Please fill all fields</string>
 </resources>

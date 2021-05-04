@@ -52,14 +52,16 @@ class UpdateFragment : Fragment() {
 
     private fun confirmRemoval(){
         val dialog = AlertDialog.Builder(requireContext())
-        dialog.setPositiveButton("Yes"){_,_ ->
+        val message: String = resources.getString(R.string.are_you_sure)
+        val removed: String = resources.getString(R.string.removed)
+        dialog.setPositiveButton(R.string.yes){_,_ ->
             mToDoViewModel.deleteItem(args.currentItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-            Toast.makeText(requireContext(), "${args.currentItem.title} Removed!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "${args.currentItem.title} $removed!", Toast.LENGTH_SHORT).show()
         }
-        dialog.setNegativeButton("No"){_, _, ->}
-        dialog.setTitle("Confirm removal")
-        dialog.setMessage("Are you sure delete '${args.currentItem.title}'?")
+        dialog.setNegativeButton(R.string.no){_, _, ->}
+        dialog.setTitle(R.string.confirm_removal)
+        dialog.setMessage("$message '${args.currentItem.title}'?")
         dialog.create()
         dialog.show()
     }
@@ -77,9 +79,9 @@ class UpdateFragment : Fragment() {
                             mSharedViewModel.parseStringToPriority(mPriority),
                             mDescription))
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-            Toast.makeText(requireContext(), "Updated successfully ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
         }else{
-            Toast.makeText(requireContext(), "Fill out all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
         }
     }
 }
