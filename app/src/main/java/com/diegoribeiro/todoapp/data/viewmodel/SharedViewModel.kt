@@ -1,13 +1,11 @@
 package com.diegoribeiro.todoapp.data.viewmodel
 
 import android.app.Application
-import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
@@ -33,11 +31,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
-    fun parseStringToPriority(priority: String): Priority {
+    fun parseIntToPriority(priority: Int): Priority {
+
         return when(priority){
-            "High priority" -> {Priority.HIGH}
-            "Medium priority" -> {Priority.MEDIUM}
-            "Low priority" -> {Priority.LOW}
+            0 -> {Priority.HIGH}
+            1 -> {Priority.MEDIUM}
+            2 -> {Priority.LOW}
             else -> Priority.LOW
         }
     }

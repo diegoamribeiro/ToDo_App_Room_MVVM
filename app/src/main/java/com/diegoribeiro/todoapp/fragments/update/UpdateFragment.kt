@@ -69,14 +69,14 @@ class UpdateFragment : Fragment() {
     private fun updateData() {
         val mTitle = current_title_et.text.toString()
         val mDescription = current_description_et.text.toString()
-        val mPriority = current_priorities_spinner.selectedItem.toString()
+        val mPriority = current_priorities_spinner.selectedItemPosition
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
         if (validation){
             mToDoViewModel.updateData(
                     ToDoData(
                             args.currentItem.id, mTitle,
-                            mSharedViewModel.parseStringToPriority(mPriority),
+                            mSharedViewModel.parseIntToPriority(mPriority),
                             mDescription))
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
             Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()

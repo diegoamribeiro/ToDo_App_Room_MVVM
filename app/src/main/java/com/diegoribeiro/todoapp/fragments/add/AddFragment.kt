@@ -45,13 +45,13 @@ class AddFragment : Fragment() {
 
     private fun insertDataToDatabase() {
         val mTitle = title_et.text.toString()
-        val mPriority = priorities_spinner.selectedItem.toString()
+        val mPriority = priorities_spinner.selectedItemPosition
         val mDescription = description_et.text.toString()
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
         if (validation){
             val newData = ToDoData(0, mTitle, mSharedViewModel
-                    .parseStringToPriority(mPriority), mDescription)
+                    .parseIntToPriority(mPriority), mDescription)
             mToDoViewModel.insert(newData)
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
             Toast.makeText(requireContext(), R.string.saved_successfully, Toast.LENGTH_SHORT).show()
