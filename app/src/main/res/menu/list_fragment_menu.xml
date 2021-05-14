@@ -15,10 +15,13 @@
             android:title="@string/sort_by">
             <menu>
                 <item android:id="@+id/menu_priority_high"
-                    android:title="@string/priority_high"/>
+                    android:title="@string/priority_high"
+                    android:icon="@drawable/ic_high" />
 
                 <item android:id="@+id/menu_priority_low"
-                    android:title="@string/priority_low"/>
+                    android:title="@string/priority_low"
+                    android:icon="@drawable/ic_low"
+                    android:iconTint="@color/green"/>
             </menu>
         </item>
     </group>
@@ -27,10 +30,12 @@
             android:title="@string/view_by">
             <menu>
                 <item android:id="@+id/menu_gridView"
-                    android:title="@string/grid_view"/>
+                    android:title="@string/grid_view"
+                    android:icon="@drawable/view_grid_icon"/>
 
                 <item android:id="@+id/menu_ListView"
-                    android:title="@string/list_view"/>
+                    android:title="@string/list_view"
+                    android:icon="@drawable/view_list_icon"/>
             </menu>
         </item>
     </group>
