@@ -31,11 +31,11 @@
             <menu>
                 <item android:id="@+id/menu_gridView"
                     android:title="@string/grid_view"
-                    android:icon="@drawable/view_grid_icon"/>
+                    android:icon="@drawable/ic_view_grid"/>
 
                 <item android:id="@+id/menu_ListView"
                     android:title="@string/list_view"
-                    android:icon="@drawable/view_list_icon"/>
+                    android:icon="@drawable/ic_view_list"/>
             </menu>
         </item>
     </group>
