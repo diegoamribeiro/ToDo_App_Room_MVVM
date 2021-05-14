@@ -36,4 +36,9 @@
     <string name="all_items_removed">All items Removed!</string>
     <!--"Please fill all fields"-->
     <string name="please_fill_all_fields">Please fill all fields</string>
+
+    <!-- Grid view -->
+    <string name="view_by">View By</string>
+    <string name="grid_view">Grid</string>
+    <string name="list_view">List</string>
 </resources>

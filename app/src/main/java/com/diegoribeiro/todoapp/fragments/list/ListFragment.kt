@@ -1,6 +1,7 @@
 package com.diegoribeiro.todoapp.fragments.list
 
 import android.app.AlertDialog
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -22,10 +23,13 @@ import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
+import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
+    private lateinit var recyclerView: RecyclerView
     private val listAdapter: ListAdapter by lazy { ListAdapter() }
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -41,18 +45,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
-        val recyclerView = view.recyclerListView
-        recyclerView.adapter = listAdapter
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        recyclerView.itemAnimator = SlideInUpAnimator().apply {
-            addDuration = 300
-        }
-        swipeToDelete(recyclerView)
-
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
-            mSharedViewModel.verifyEmptyList(data)
-            listAdapter.setData(data)
-        })
+        setupRecyclerView(view)
 
         mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner,  {
             showEmptyDatabaseView(it)
@@ -64,6 +57,43 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         //Set menu
         setHasOptionsMenu(true)
         return view
+    }
+
+    private fun setupRecyclerView(view: View){
+        recyclerView = view.recyclerListView
+        recyclerView.adapter = listAdapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        recyclerView.itemAnimator = SlideInUpAnimator().apply {
+            addDuration = 300
+        }
+        swipeToDelete(recyclerView)
+
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
+            mSharedViewModel.verifyEmptyList(data)
+            listAdapter.setData(data)
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_delete_all -> confirmRemoval()
+            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
+            R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
+            R.id.menu_ListView -> listView()
+            R.id.menu_gridView -> gridView()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun listView(){
+            recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            Log.d("**SetListView", "Clicked")
+
+    }
+
+    private fun gridView(){
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        Log.d("**SetListView", "Clicked")
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView){
@@ -98,15 +128,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             view?.no_data_imageView?.visibility = View.INVISIBLE
             view?.no_data_textView?.visibility = View.INVISIBLE
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menu_delete_all -> confirmRemoval()
-            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
-            R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -154,4 +175,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         searchView?.isSubmitButtonEnabled = true
         searchView?.setOnQueryTextListener(this)
     }
+
+
 }

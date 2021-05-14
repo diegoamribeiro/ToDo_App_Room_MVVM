@@ -48,6 +48,4 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
         this.dataList = toDoList
         toDoDiffResult.dispatchUpdatesTo(this)
     }
-
-
 }

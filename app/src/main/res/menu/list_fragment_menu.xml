@@ -22,6 +22,18 @@
             </menu>
         </item>
     </group>
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/menu_viewBy"
+            android:title="@string/view_by">
+            <menu>
+                <item android:id="@+id/menu_gridView"
+                    android:title="@string/grid_view"/>
+
+                <item android:id="@+id/menu_ListView"
+                    android:title="@string/list_view"/>
+            </menu>
+        </item>
+    </group>
     <item
         android:id="@+id/menu_delete_all"
         android:title="@string/delete_all"

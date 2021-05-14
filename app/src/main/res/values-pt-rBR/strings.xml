@@ -38,4 +38,9 @@
     <string name="all_items_removed">Todos os itens foram removidos</string>
     <!--"Please fill all fields"-->
     <string name="please_fill_all_fields">Por favor, preencha todos os campos</string>
+
+    <!-- View By -->
+    <string name="view_by">Vizualizar</string>
+    <string name="grid_view">Grade</string>
+    <string name="list_view">Lista</string>
 </resources>
