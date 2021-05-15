@@ -15,7 +15,7 @@ class DatePicker(
 ):  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     var requireContext = context
-    var deadliteEditText = editText
+    var deadlineEditText = editText
 
     var day: Int = 0
     var month: Int = 0
@@ -43,7 +43,7 @@ class DatePicker(
         savedHour = hourOfDay
         savedMinute = minute
 
-        deadliteEditText?.setText(
+        deadlineEditText?.setText(
             "${String.format("%02d", savedDay)}-" +
                     "${String.format("%02d", savedMonth)}-" +
                     "${String.format("%04d", savedYear)} " +
@@ -53,7 +53,7 @@ class DatePicker(
     }
 
     fun pickDate() {
-        deadliteEditText?.setOnClickListener{
+        deadlineEditText?.setOnClickListener{
             Log.w("test click", "Deadline Clicked")
             getDateTimeCalendar()
             DatePickerDialog(requireContext, this, year, month, day).show()
