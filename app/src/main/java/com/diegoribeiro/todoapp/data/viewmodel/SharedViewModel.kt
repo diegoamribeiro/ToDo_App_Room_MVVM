@@ -12,11 +12,13 @@ import androidx.lifecycle.MutableLiveData
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
+import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 class SharedViewModel(application: Application) : AndroidViewModel(application){
-    @RequiresApi(Build.VERSION_CODES.O)
+
     //private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -62,7 +64,21 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
 //        }
 //    }
 
-    fun verifyDataFromUser(title: String, description: String): Boolean{
-        return !(title.isEmpty() || description.isEmpty())
+
+    fun setDeadLine(dateTime: ToDoDateTime): OffsetDateTime{
+        return OffsetDateTime.of(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            dateTime.hour,
+            dateTime.minute,
+            0,
+            0,
+            OffsetDateTime.now().offset
+        )
+    }
+
+    fun verifyDataFromUser(title: String, description: String, date: String, time: String): Boolean{
+        return !(title.isEmpty() || description.isEmpty() || date.isEmpty() || time.isEmpty())
     }
 }

@@ -79,7 +79,7 @@ dependencies {
     kapt "androidx.databinding:databinding-common:4.2.1"
 
     //RecyclerView Animation
-    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+    implementation "jp.wasabeef:recyclerview-animators:4.0.2"
 
 
 

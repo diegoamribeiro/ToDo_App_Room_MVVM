@@ -1,29 +1,43 @@
 package com.diegoribeiro.todoapp.fragments.update
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.DatePicker
+import android.widget.TimePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.ToDoData
+import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.feature.DatePickerFragment
+import com.diegoribeiro.todoapp.feature.TimePickerFragment
+import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
-
-class UpdateFragment : Fragment() {
+@RequiresApi(Build.VERSION_CODES.O)
+class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private val args: UpdateFragmentArgs by navArgs<UpdateFragmentArgs>()
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
+    private var deadLine: ToDoDateTime = ToDoDateTime()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_update, container, false)
@@ -31,6 +45,10 @@ class UpdateFragment : Fragment() {
         view.current_description_et.setText(args.currentItem.description)
         view.current_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         view.current_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+
+        view.current_text_date.setOnClickListener { showDatePickerDialog() }
+        view.current_text_time.setOnClickListener { showTimePickerDialog() }
+
         return view
     }
 
@@ -70,8 +88,10 @@ class UpdateFragment : Fragment() {
         val mTitle = current_title_et.text.toString()
         val mDescription = current_description_et.text.toString()
         val mPriority = current_priorities_spinner.selectedItemPosition
+        val mDate = current_text_date.text.toString()
+        val mTime = current_text_time.text.toString()
 
-        val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
+        val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription, mDate, mTime)
         if (validation){
             mToDoViewModel.updateData(
                     ToDoData(
@@ -83,5 +103,26 @@ class UpdateFragment : Fragment() {
         }else{
             Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
         }
+    }
+    private fun showDatePickerDialog() {
+        val newFragment: DialogFragment = DatePickerFragment.newInstance(this)
+        newFragment.show(requireActivity().supportFragmentManager, "datePicker")
+    }
+
+    private fun showTimePickerDialog(){
+        val newFragment: DialogFragment = TimePickerFragment.newInstance(this)
+        newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        deadLine = deadLine.copy(day = dayOfMonth, month = month + 1, year = year)
+        text_new_date.text = "$dayOfMonth/${deadLine.month}/$year"
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
+        text_new_time.text = "$hourOfDay:$minute"
     }
 }

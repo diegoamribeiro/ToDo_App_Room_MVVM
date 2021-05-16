@@ -24,7 +24,7 @@ class Converter {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun toOffsetDateTime(value: String?): OffsetDateTime?{
+    fun toOffsetDateTime(value: String): OffsetDateTime?{
         return value?.let {
             formatter.parse(value, OffsetDateTime::from)
         }

@@ -39,30 +39,34 @@
         android:id="@+id/text_new_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/date"
         android:textSize="18sp"
+        android:background="@drawable/item_background"
         android:textColor="@color/darkGray"
+        android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/text_new_time"
         app:layout_constraintTop_toBottomOf="@id/priorities_spinner"
-        />
+        app:drawableEndCompat="@drawable/ic_date"/>
     <TextView
         android:id="@+id/text_new_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/date"
+        android:layout_marginEnd="8dp"
+        android:text="@string/time"
         android:textSize="18sp"
         android:textColor="@color/darkGray"
+        android:background="@drawable/item_background"
+        android:padding="8dp"
         app:layout_constraintStart_toEndOf="@id/text_new_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/priorities_spinner"
-        />
+        app:drawableEndCompat="@drawable/ic_time" />
 
     <EditText
         android:id="@+id/description_et"
@@ -80,6 +84,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/text_new_time"
         android:autofillHints="" />
 </androidx.constraintlayout.widget.ConstraintLayout>

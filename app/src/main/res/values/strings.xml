@@ -42,4 +42,5 @@
     <string name="grid_view">Grid</string>
     <string name="list_view">List</string>
     <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>
