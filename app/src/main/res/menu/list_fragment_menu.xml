@@ -6,7 +6,7 @@
     android:id="@+id/menu_search"
     android:title="@string/search"
     android:icon="@drawable/ic_search"
-    android:iconTint="@color/white"
+
     app:showAsAction="ifRoom"
     app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
@@ -20,8 +20,7 @@
 
                 <item android:id="@+id/menu_priority_low"
                     android:title="@string/priority_low"
-                    android:icon="@drawable/ic_low"
-                    android:iconTint="@color/green"/>
+                    android:icon="@drawable/ic_low" />
             </menu>
         </item>
     </group>
@@ -33,7 +32,7 @@
                     android:title="@string/grid_view"
                     android:icon="@drawable/ic_view_grid"/>
 
-                <item android:id="@+id/menu_ListView"
+                <item android:id="@+id/menu_listView"
                     android:title="@string/list_view"
                     android:icon="@drawable/ic_view_list"/>
             </menu>

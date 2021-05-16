@@ -1,9 +1,7 @@
 package com.diegoribeiro.todoapp.fragments.list
 
 import android.app.AlertDialog
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -79,21 +77,9 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             R.id.menu_delete_all -> confirmRemoval()
             R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
-            R.id.menu_ListView -> listView()
-            R.id.menu_gridView -> gridView()
+
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun listView(){
-            recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            Log.d("**SetListView", "Clicked")
-
-    }
-
-    private fun gridView(){
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        Log.d("**SetListView", "Clicked")
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView){
