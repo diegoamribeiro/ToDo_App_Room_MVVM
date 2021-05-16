@@ -12,5 +12,6 @@ data class ToDoData(
         val id: Int,
         var title: String,
         var priority: Priority,
-        var description: String
+        var description: String,
+        var deadline: String
 ): Parcelable

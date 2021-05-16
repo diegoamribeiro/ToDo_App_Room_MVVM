@@ -37,6 +37,22 @@
         app:layout_constraintTop_toBottomOf="@+id/current_title_et" />
 
     <EditText
+        android:id="@+id/current_deadline_et"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:hint="Deadline to do"
+        android:background="@drawable/custom_input"
+        android:ems="10"
+        android:focusable="false"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner"
+        android:autofillHints="" />
+
+    <EditText
         android:id="@+id/current_description_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/current_deadline_et"
         android:autofillHints="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

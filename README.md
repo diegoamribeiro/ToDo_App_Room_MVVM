@@ -24,6 +24,7 @@ The first update added was the Brazilian Portuguese language.
 - Transitions animations
 - Clean Architecture
 - Swipe to Delete
+- Date and Time Picker Dialogs
 
 ## Some functions
 ### Swipe to delete | Undo to Restore  |  Search Engine
@@ -41,8 +42,12 @@ The first update added was the Brazilian Portuguese language.
 
 
 
-# Autor
+# Team
 
-Diego Ribeiro
+**Diego Ribeiro**
 
 https://www.linkedin.com/in/diego-ribeiro-knot/
+
+**Anderson Pimentel**
+
+https://www.linkedin.com/in/anderson-pimentel-a2572624/
