@@ -1,8 +1,10 @@
 package com.diegoribeiro.todoapp.fragments.list.adapter
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +15,7 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
 import kotlinx.android.synthetic.main.row_layout.view.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
 
     var dataList = emptyList<ToDoData>()
@@ -27,9 +30,12 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
         return dataList.size
     }
 
+
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.title_txt.text = dataList[position].title
         holder.itemView.description_txt.text = dataList[position].description
+        holder.itemView.deadline_txt.text = dataList[position].toDoDateTime?.toLocalDate().toString()
 
         when(dataList[position].priority){
             Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))

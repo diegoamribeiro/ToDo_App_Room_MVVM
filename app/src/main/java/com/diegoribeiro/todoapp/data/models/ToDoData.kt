@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
+import java.time.OffsetDateTime
 
 @Entity(tableName = "todo_table")
 @Parcelize
@@ -12,5 +13,6 @@ data class ToDoData(
         val id: Int,
         var title: String,
         var priority: Priority,
-        var description: String
+        var description: String,
+        var toDoDateTime: OffsetDateTime? = null
 ): Parcelable

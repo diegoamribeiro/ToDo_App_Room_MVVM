@@ -1,17 +1,23 @@
 package com.diegoribeiro.todoapp.data.viewmodel
 
 import android.app.Application
+import android.os.Build
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 class SharedViewModel(application: Application) : AndroidViewModel(application){
+    @RequiresApi(Build.VERSION_CODES.O)
+    //private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
 
@@ -48,6 +54,13 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
             Priority.LOW -> 2
         }
     }
+
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun parseToOffsetDateTime(value: String?): OffsetDateTime?{
+//        return value?.let {
+//            formatter.parse(value, OffsetDateTime::from)
+//        }
+//    }
 
     fun verifyDataFromUser(title: String, description: String): Boolean{
         return !(title.isEmpty() || description.isEmpty())

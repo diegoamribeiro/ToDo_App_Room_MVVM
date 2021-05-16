@@ -10,7 +10,7 @@
     app:showAsAction="ifRoom"
     app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item android:id="@+id/menu_sortBy"
             android:title="@string/sort_by">
             <menu>
@@ -24,7 +24,7 @@
             </menu>
         </item>
     </group>
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item android:id="@+id/menu_viewBy"
             android:title="@string/view_by">
             <menu>

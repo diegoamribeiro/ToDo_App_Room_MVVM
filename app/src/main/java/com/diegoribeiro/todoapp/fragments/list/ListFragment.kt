@@ -1,9 +1,11 @@
 package com.diegoribeiro.todoapp.fragments.list
 
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +27,7 @@ import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var recyclerView: RecyclerView
@@ -56,6 +59,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         setHasOptionsMenu(true)
         return view
     }
+
 
     private fun setupRecyclerView(view: View){
         recyclerView = view.recyclerListView

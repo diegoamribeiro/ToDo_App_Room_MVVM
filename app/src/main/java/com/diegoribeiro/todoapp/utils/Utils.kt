@@ -2,10 +2,14 @@ package com.diegoribeiro.todoapp.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.diegoribeiro.todoapp.data.models.ToDoDateTime
+import java.time.OffsetDateTime
 
 fun hideKeyboard(activity: Activity){
     val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -24,4 +28,15 @@ fun <T>LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observe
             removeObserver(this)
         }
     })
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun OffsetDateTime.convertToDateTime(): ToDoDateTime {
+    return ToDoDateTime(
+            day = dayOfMonth,
+            month = monthValue,
+            year = year,
+            hour = hour,
+            minute = minute
+    )
 }
