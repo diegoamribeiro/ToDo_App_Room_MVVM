@@ -40,7 +40,7 @@
         android:id="@+id/current_deadline_et"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:hint="Deadline to do"
+        android:hint="@string/deadline"
         android:background="@drawable/custom_input"
         android:ems="10"
         android:focusable="false"
