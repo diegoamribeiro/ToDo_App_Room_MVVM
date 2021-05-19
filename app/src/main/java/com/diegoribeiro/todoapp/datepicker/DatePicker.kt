@@ -54,7 +54,6 @@ class DatePicker(
 
     fun pickDate() {
         deadlineEditText?.setOnClickListener{
-            Log.w("test click", "Deadline Clicked")
             getDateTimeCalendar()
             DatePickerDialog(requireContext, this, year, month, day).show()
         }
