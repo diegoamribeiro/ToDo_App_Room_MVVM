@@ -44,4 +44,5 @@
     <string name="grid_view">Grade</string>
     <string name="list_view">Lista</string>
     <string name="deadline">Prazo</string>
+    <string name="calendar_icon">Ícone de Calendário</string>
 </resources>
