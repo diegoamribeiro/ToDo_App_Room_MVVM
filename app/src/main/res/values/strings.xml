@@ -43,4 +43,8 @@
     <string name="list_view">List</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+
+    <!--Notifcation Channel-->
+    <string name="notification_channel_name">Channel Name</string>
+    <string name="notification_name">Notification Name</string>
 </resources>

@@ -17,7 +17,7 @@ class DatePickerFragment : DialogFragment(){
         return DatePickerDialog(requireActivity(), dateListener, year, month, day)
     }
 
-    //@JvmName("setDateListener1")
+    @JvmName("setDateListener1")
     fun setDateListener(listener: DatePickerDialog.OnDateSetListener){
         dateListener = listener
     }

@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.fragments.add.AddFragment
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
@@ -34,6 +36,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val listAdapter: ListAdapter by lazy { ListAdapter() }
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,7 +107,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         val snackBar = Snackbar.make(
                 view, "Deleted '${deletedItem.title}'", Snackbar.LENGTH_SHORT
         )
-        snackBar.setAction("Undo"){
+        snackBar.setAction(R.string.undo){
             mToDoViewModel.insert(deletedItem)
         }
         snackBar.show()
@@ -165,6 +168,4 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         searchView?.isSubmitButtonEnabled = true
         searchView?.setOnQueryTextListener(this)
     }
-
-
 }
