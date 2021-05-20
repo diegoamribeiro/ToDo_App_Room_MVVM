@@ -105,13 +105,13 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         deadLine = deadLine.copy(day = dayOfMonth, month = month + 1, year = year)
-        text_new_date.text = "$dayOfMonth/${deadLine.month}/$year"
+        text_new_date.text = deadLine.getDate()
     }
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
-        text_new_time.text = "$hourOfDay:$minute"
+        text_new_time.text = deadLine.getTime()
     }
 
 }
