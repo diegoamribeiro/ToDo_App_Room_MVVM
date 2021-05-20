@@ -23,9 +23,10 @@ import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
-import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
+import java.time.OffsetDateTime
+
 @RequiresApi(Build.VERSION_CODES.O)
 class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private val args: UpdateFragmentArgs by navArgs<UpdateFragmentArgs>()
@@ -45,6 +46,9 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         view.current_description_et.setText(args.currentItem.description)
         view.current_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         view.current_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+
+        view.current_text_date.text = dateToString(args.currentItem.toDoDateTime!!)
+        view.current_text_time.text = timeToString(args.currentItem.toDoDateTime!!)
 
         view.current_text_date.setOnClickListener { showDatePickerDialog() }
         view.current_text_time.setOnClickListener { showTimePickerDialog() }
@@ -97,7 +101,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
                     ToDoData(
                             args.currentItem.id, mTitle,
                             mSharedViewModel.parseIntToPriority(mPriority),
-                            mDescription))
+                            mDescription, mSharedViewModel.setDeadLine(deadLine)))
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
             Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
         }else{
@@ -117,12 +121,35 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         deadLine = deadLine.copy(day = dayOfMonth, month = month + 1, year = year)
-        text_new_date.text = "$dayOfMonth/${deadLine.month}/$year"
+        current_text_date.text = deadLine.getDate()
     }
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
-        text_new_time.text = "$hourOfDay:$minute"
+        current_text_time.text = deadLine.getTime()
     }
+
+    private fun dateToString (dateTime: OffsetDateTime): String{
+        val toDoDateTime = ToDoDateTime(
+            dateTime.dayOfMonth,
+            dateTime.monthValue,
+            dateTime.year,
+            dateTime.hour,
+            dateTime.minute
+        )
+        return toDoDateTime.getDate()
+    }
+
+    private fun timeToString (dateTime: OffsetDateTime): String{
+        val toDoDateTime = ToDoDateTime(
+            dateTime.dayOfMonth,
+            dateTime.monthValue,
+            dateTime.year,
+            dateTime.hour,
+            dateTime.minute
+        )
+        return toDoDateTime.getTime()
+    }
+
 }
