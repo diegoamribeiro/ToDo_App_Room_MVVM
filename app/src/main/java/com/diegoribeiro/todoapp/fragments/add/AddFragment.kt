@@ -85,7 +85,6 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         inflater.inflate(R.menu.add_fragment_menu, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_add){
             insertDataToDatabase()
