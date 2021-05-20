@@ -12,8 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
+import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
 import kotlinx.android.synthetic.main.row_layout.view.*
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.Period
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
@@ -33,7 +37,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.title_txt.text = dataList[position].title
         holder.itemView.description_txt.text = dataList[position].description
-        holder.itemView.deadline_txt.text = dataList[position].toDoDateTime?.toLocalDate().toString()
+        holder.itemView.deadline_txt.text = dateTimeToString(dataList[position].toDoDateTime!!)
 
         when(dataList[position].priority){
             Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
@@ -44,6 +48,8 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
             val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.itemView.findNavController().navigate(action)
         }
+
+        drawCalendarIcon(holder, dataList[position].toDoDateTime!!)
     }
 
     fun setData(toDoList: List<ToDoData>){
@@ -51,5 +57,37 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
         val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         this.dataList = toDoList
         toDoDiffResult.dispatchUpdatesTo(this)
+    }
+
+    private fun dateTimeToString (dateTime: OffsetDateTime): String{
+        val toDoDateTime = ToDoDateTime(
+            dateTime.dayOfMonth,
+            dateTime.monthValue,
+            dateTime.year,
+            dateTime.hour,
+            dateTime.minute
+        )
+        return toDoDateTime.getDateTime()
+    }
+
+    private fun drawCalendarIcon(holder: ListAdapter.MyViewHolder, date: OffsetDateTime){
+        if (date != null){
+            val dateDeadline = date.toLocalDate()
+            val period = Period.between(LocalDate.now(),dateDeadline)
+            if (period.months < 0){
+                holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+            } else if (period.months == 0){
+                when(period.days){
+                    in 0..3 ->
+                        holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
+                    in -31..-1 ->
+                        holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                    else ->
+                        return
+                }
+            }
+        }else{
+            holder.itemView.ic_calendar.visibility = View.GONE
+        }
     }
 }
