@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import java.time.OffsetDateTime
+import kotlin.random.Random
 
 fun hideKeyboard(activity: Activity){
     val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -39,4 +40,9 @@ fun OffsetDateTime.convertToDateTime(): ToDoDateTime {
             hour = hour,
             minute = minute
     )
+}
+
+fun String.toRandom(): String{
+    val random = Random(32)
+    return this + random
 }

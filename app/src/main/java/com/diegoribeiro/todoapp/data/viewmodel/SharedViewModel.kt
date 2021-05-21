@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
@@ -18,8 +19,6 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 class SharedViewModel(application: Application) : AndroidViewModel(application){
-
-    //private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
 
@@ -57,11 +56,8 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun parseToOffsetDateTime(value: String?): OffsetDateTime?{
-//        return value?.let {
-//            formatter.parse(value, OffsetDateTime::from)
-//        }
+//    fun getTitle(title: ToDoData){
+//        _liveTitle!!.value = title
 //    }
 
 
