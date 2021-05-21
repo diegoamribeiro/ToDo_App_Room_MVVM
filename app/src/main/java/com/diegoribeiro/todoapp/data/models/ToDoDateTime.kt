@@ -15,6 +15,21 @@ data class ToDoDateTime(
         return hour != 0
     }
     fun getDateTime(): String{
-        return "$day/$month/$year - $hour:$minute"
+        return "${String.format("%02d", day)}/" +
+                "${String.format("%02d", month)}/" +
+                "$year - " +
+                "${String.format("%02d", hour)}:" +
+                "${String.format("%02d", minute)}"
+    }
+
+    fun getDate(): String{
+        return "${String.format("%02d", day)}/" +
+                "${String.format("%02d", month)}/" +
+                "$year"
+    }
+
+    fun getTime(): String{
+        return  "${String.format("%02d", hour)}:" +
+                "${String.format("%02d", minute)}"
     }
 }
