@@ -3,33 +3,24 @@ package com.diegoribeiro.todoapp.fragments.add
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.service.autofill.FillEventHistory
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
@@ -37,18 +28,13 @@ import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
-import com.diegoribeiro.todoapp.fragments.list.ListFragment
-import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
-import com.diegoribeiro.todoapp.utils.NotificationJobService
 import com.diegoribeiro.todoapp.utils.NotificationWorkManager
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.row_layout.*
-import kotlinx.coroutines.currentCoroutineContext
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -131,8 +117,9 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
             .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
             .setInputData(data.build())
-            .addTag(newData.id.toString())
+            .addTag(toDoData.title)
             .build()
+
         workManager.enqueue(workRequest)
     }
 
@@ -162,6 +149,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
 
         const val EXTRA_TASK_NAME = "EXTRA_TASK_NAME"
         const val EXTRA_TASK_ID = "EXTRA_TASK_ID"
+        const val EXTRA_TAG = "EXTRA_TAG"
         const val SCHEDULE_EXTRA_TASK_NAME = "SCHEDULE_EXTRA_TASK_NAME"
 
         /**
