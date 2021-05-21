@@ -37,7 +37,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.title_txt.text = dataList[position].title
         holder.itemView.description_txt.text = dataList[position].description
-        holder.itemView.deadline_txt.text = dateTimeToString(dataList[position].toDoDateTime!!)
+        holder.itemView.deadline_txt.text = dateTimeToString(dataList[position].dateTime!!)
 
         when(dataList[position].priority){
             Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
@@ -49,7 +49,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
             holder.itemView.findNavController().navigate(action)
         }
 
-        drawCalendarIcon(holder, dataList[position].toDoDateTime!!)
+        drawCalendarIcon(holder, dataList[position].dateTime!!)
     }
 
     fun setData(toDoList: List<ToDoData>){

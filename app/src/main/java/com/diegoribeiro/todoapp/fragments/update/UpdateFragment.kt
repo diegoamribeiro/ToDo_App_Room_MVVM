@@ -47,8 +47,8 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         view.current_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         view.current_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
 
-        view.current_text_date.text = dateToString(args.currentItem.toDoDateTime!!)
-        view.current_text_time.text = timeToString(args.currentItem.toDoDateTime!!)
+        view.current_text_date.text = dateToString(args.currentItem.dateTime!!)
+        view.current_text_time.text = timeToString(args.currentItem.dateTime!!)
 
         view.current_text_date.setOnClickListener { showDatePickerDialog() }
         view.current_text_time.setOnClickListener { showTimePickerDialog() }
