@@ -86,6 +86,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         val time = text_new_time.text.toString()
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription, date, time)
+
         if (validation){
             newData = ToDoData(0, mTitle, mSharedViewModel
                     .parseIntToPriority(mPriority), mDescription, mSharedViewModel.setDeadLine(deadLine))

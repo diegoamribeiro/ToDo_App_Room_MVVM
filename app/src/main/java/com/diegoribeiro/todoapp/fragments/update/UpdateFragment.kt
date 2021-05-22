@@ -79,7 +79,6 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun confirmRemoval(){
         val dialog = AlertDialog.Builder(requireContext())
         val message: String = resources.getString(R.string.are_you_sure)
@@ -116,6 +115,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
             Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun showDatePickerDialog() {
         val newFragment: DialogFragment = DatePickerFragment.newInstance(this)
         newFragment.show(requireActivity().supportFragmentManager, "datePicker")

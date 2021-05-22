@@ -19,7 +19,7 @@ data class ToDoDateTime(
                 "${String.format("%02d", month)}/" +
                 "$year - " +
                 "${String.format("%02d", hour)}:" +
-                "${String.format("%02d", minute)}"
+                String.format("%02d", minute)
     }
 
     fun getDate(): String{
@@ -30,6 +30,6 @@ data class ToDoDateTime(
 
     fun getTime(): String{
         return  "${String.format("%02d", hour)}:" +
-                "${String.format("%02d", minute)}"
+                String.format("%02d", minute)
     }
 }

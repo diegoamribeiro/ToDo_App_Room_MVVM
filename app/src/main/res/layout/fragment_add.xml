@@ -35,6 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_et" />
+
     <TextView
         android:id="@+id/text_new_date"
         android:layout_width="0dp"
@@ -51,6 +52,7 @@
         app:layout_constraintEnd_toStartOf="@id/text_new_time"
         app:layout_constraintTop_toBottomOf="@id/priorities_spinner"
         app:drawableEndCompat="@drawable/ic_date"/>
+
     <TextView
         android:id="@+id/text_new_time"
         android:layout_width="0dp"

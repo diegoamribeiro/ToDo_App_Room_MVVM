@@ -56,11 +56,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
-//    fun getTitle(title: ToDoData){
-//        _liveTitle!!.value = title
-//    }
-
-
     fun setDeadLine(dateTime: ToDoDateTime): OffsetDateTime{
         return OffsetDateTime.of(
             dateTime.year,
@@ -77,4 +72,5 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
     fun verifyDataFromUser(title: String, description: String, date: String, time: String): Boolean{
         return !(title.isEmpty() || description.isEmpty() || date.isEmpty() || time.isEmpty())
     }
+
 }

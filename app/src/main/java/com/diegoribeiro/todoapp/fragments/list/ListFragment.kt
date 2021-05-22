@@ -38,8 +38,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
 
-    private val workManager = context?.let { WorkManager.getInstance(it.applicationContext) }
-
+    private val workManager = WorkManager.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,7 +97,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = listAdapter.dataList[viewHolder.adapterPosition]
                 mToDoViewModel.deleteItem(itemToDelete)
-                workManager!!.cancelAllWorkByTag(itemToDelete.title)
+                workManager.cancelAllWorkByTag(itemToDelete.title)
 
                 listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 restoreDeletedItem(viewHolder.itemView, itemToDelete)
