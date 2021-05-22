@@ -45,6 +45,11 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private lateinit var newData: ToDoData
     private val workManager = WorkManager.getInstance()
 
+    private lateinit var high: String
+    private lateinit var medium: String
+    private lateinit var low: String
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +57,10 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
         val view =  inflater.inflate(R.layout.fragment_add, container, false)
+
+        high = getString(R.string.priority_high)
+        medium = getString(R.string.priority_medium)
+        low = getString(R.string.priority_low)
 
         setHasOptionsMenu(true)
         view.priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
@@ -112,9 +121,10 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private fun createWorkManager(toDoData: ToDoData){
         val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime)
         val data = Data.Builder()
+
         data.putString(EXTRA_TASK_NAME, toDoData.title)
         data.putString(EXTRA_TASK_PRIORITY,
-            mSharedViewModel.parsePriorityToResInt(toDoData.priority)
+            mSharedViewModel.parsePriorityToResInt(toDoData.priority, high, medium, low)
         )
         data.putInt(EXTRA_TASK_ID, toDoData.id)
 

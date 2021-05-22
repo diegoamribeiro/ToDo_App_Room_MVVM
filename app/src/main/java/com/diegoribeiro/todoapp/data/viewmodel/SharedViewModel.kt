@@ -57,11 +57,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
-    fun parsePriorityToResInt(priority: Priority): String {
-        val high: String = Resources.getSystem().getResourceName(R.string.priority_low)
-        val medium: String = Resources.getSystem().getResourceName(R.string.priority_low)
-        val low: String = Resources.getSystem().getResourceName(R.string.priority_low)
-
+    fun parsePriorityToResInt(
+        priority: Priority,
+        high: String,
+        medium: String,
+        low: String
+    ): String {
         return when (priority) {
             Priority.HIGH -> low
             Priority.MEDIUM -> medium
