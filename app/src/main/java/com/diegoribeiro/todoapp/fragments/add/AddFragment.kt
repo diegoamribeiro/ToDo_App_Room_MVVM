@@ -113,6 +113,9 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime)
         val data = Data.Builder()
         data.putString(EXTRA_TASK_NAME, toDoData.title)
+        data.putString(EXTRA_TASK_PRIORITY,
+            mSharedViewModel.parsePriorityToResInt(toDoData.priority)
+        )
         data.putInt(EXTRA_TASK_ID, toDoData.id)
 
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
@@ -150,6 +153,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
 
         const val EXTRA_TASK_NAME = "EXTRA_TASK_NAME"
         const val EXTRA_TASK_ID = "EXTRA_TASK_ID"
+        const val EXTRA_TASK_PRIORITY = "EXTRA_TASK_PRIORITY"
         const val EXTRA_TAG = "EXTRA_TAG"
         const val SCHEDULE_EXTRA_TASK_NAME = "SCHEDULE_EXTRA_TASK_NAME"
 

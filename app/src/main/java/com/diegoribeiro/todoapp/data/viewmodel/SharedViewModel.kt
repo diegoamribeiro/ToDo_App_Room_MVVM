@@ -1,6 +1,7 @@
 package com.diegoribeiro.todoapp.data.viewmodel
 
 import android.app.Application
+import android.content.res.Resources
 import android.os.Build
 import android.view.View
 import android.widget.AdapterView
@@ -53,6 +54,18 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
             Priority.HIGH -> 0
             Priority.MEDIUM -> 1
             Priority.LOW -> 2
+        }
+    }
+
+    fun parsePriorityToResInt(priority: Priority): String {
+        val high: String = Resources.getSystem().getResourceName(R.string.priority_low)
+        val medium: String = Resources.getSystem().getResourceName(R.string.priority_low)
+        val low: String = Resources.getSystem().getResourceName(R.string.priority_low)
+
+        return when (priority) {
+            Priority.HIGH -> low
+            Priority.MEDIUM -> medium
+            Priority.LOW -> high
         }
     }
 

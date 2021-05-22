@@ -30,24 +30,25 @@ class NotificationWorkManager(context: Context, parameters: WorkerParameters): W
     @SuppressLint("LongLogTag")
     override fun doWork(): Result {
         val name = inputData.getString(AddFragment.EXTRA_TASK_NAME)
+        val priority = inputData.getString(AddFragment.EXTRA_TASK_PRIORITY)
         return if (name != null) {
             //Log.d("**Name", name)
             createChannel()
-            sendNotification(name)
+            sendNotification(name, priority.toString())
             Result.success()
         }else{
             return Result.failure()
         }
     }
 
-    private fun sendNotification(title: String) {
-        val notificationBuilder: NotificationCompat.Builder = getNotificationBuilder(title)
+    private fun sendNotification(title: String, contentText: String) {
+        val notificationBuilder: NotificationCompat.Builder = getNotificationBuilder(title, contentText)
 
         //Delivery notification
         notificationWorkManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
-    private fun getNotificationBuilder(title: String): NotificationCompat.Builder {
+    private fun getNotificationBuilder(title: String, contentText: String): NotificationCompat.Builder {
 
         val intent = Intent(applicationContext, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
@@ -56,7 +57,7 @@ class NotificationWorkManager(context: Context, parameters: WorkerParameters): W
             .setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_time_notification)
             .setContentTitle(title)
-            .setContentText(applicationContext.getText(R.string.notification_name))
+            .setContentText(contentText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
 
