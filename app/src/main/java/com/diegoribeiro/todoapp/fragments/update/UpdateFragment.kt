@@ -39,6 +39,14 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         savedInstanceState: Bundle?
     ): View? {
 
+        deadLine = ToDoDateTime(
+            args.currentItem.dateTime!!.dayOfMonth,
+            args.currentItem.dateTime!!.monthValue,
+            args.currentItem.dateTime!!.year,
+            args.currentItem.dateTime!!.hour,
+            args.currentItem.dateTime!!.minute
+        )
+
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_update, container, false)
