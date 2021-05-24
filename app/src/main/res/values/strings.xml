@@ -16,6 +16,7 @@
     <string name="delete">Delete</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="deadline">Deadline</string>
     <string-array name="priorities">
         <item>High Priority</item>
         <item>Medium Priority</item>

@@ -18,6 +18,7 @@
     <string name="delete">Deletar</string>
     <string name="title">Título</string>
     <string name="description">Descrição</string>
+    <string name="deadline">Prazo</string>
     <string-array name="priorities">
         <item>Prioridade Alta</item>
         <item>Prioridade Média</item>
