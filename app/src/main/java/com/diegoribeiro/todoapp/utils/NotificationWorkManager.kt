@@ -17,6 +17,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
+import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.fragments.add.AddFragment
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -29,12 +30,13 @@ class NotificationWorkManager(context: Context, parameters: WorkerParameters): W
 
     @SuppressLint("LongLogTag")
     override fun doWork(): Result {
-        val name = inputData.getString(AddFragment.EXTRA_TASK_NAME)
-        val priority = inputData.getString(AddFragment.EXTRA_TASK_PRIORITY)
+        val name = inputData.getString(ToDoConstants.EXTRA_TASK_NAME)
+        val priority = inputData.getString(ToDoConstants.EXTRA_TASK_PRIORITY)
+        val deadLine = inputData.getString(ToDoConstants.EXTRA_TASK_DEADLINE)
         return if (name != null) {
             //Log.d("**Name", name)
             createChannel()
-            sendNotification(name, priority.toString())
+            sendNotification(name, "${priority.toString()} - ${deadLine.toString()}")
             Result.success()
         }else{
             return Result.failure()
