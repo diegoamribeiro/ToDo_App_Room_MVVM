@@ -39,13 +39,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         savedInstanceState: Bundle?
     ): View? {
 
-        deadLine = ToDoDateTime(
-            args.currentItem.dateTime!!.dayOfMonth,
-            args.currentItem.dateTime!!.monthValue,
-            args.currentItem.dateTime!!.year,
-            args.currentItem.dateTime!!.hour,
-            args.currentItem.dateTime!!.minute
-        )
+        deadLine = mSharedViewModel.parseOffsetDateTimeToToDataDateTime(args.currentItem.dateTime)
 
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
