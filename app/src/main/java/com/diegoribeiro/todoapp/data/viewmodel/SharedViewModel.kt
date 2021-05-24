@@ -70,6 +70,16 @@ class SharedViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
+    fun parseOffsetDateTimeToToDataDateTime(dateTime: OffsetDateTime?): ToDoDateTime{
+        return ToDoDateTime(
+            dateTime!!.dayOfMonth,
+            dateTime.monthValue,
+            dateTime.year,
+            dateTime.hour,
+            dateTime.minute
+        )
+    }
+
     fun setDeadLine(dateTime: ToDoDateTime): OffsetDateTime{
         return OffsetDateTime.of(
             dateTime.year,
