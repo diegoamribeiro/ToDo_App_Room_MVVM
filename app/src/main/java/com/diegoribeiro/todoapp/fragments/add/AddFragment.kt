@@ -21,7 +21,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
+import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
@@ -31,6 +33,7 @@ import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.NotificationWorkManager
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
+import kotlinx.android.synthetic.main.fragment_update.view.*
 import kotlinx.android.synthetic.main.row_layout.*
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
@@ -45,11 +48,6 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private lateinit var newData: ToDoData
     private val workManager = WorkManager.getInstance()
 
-    private lateinit var high: String
-    private lateinit var medium: String
-    private lateinit var low: String
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,17 +56,13 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         setHasOptionsMenu(true)
         val view =  inflater.inflate(R.layout.fragment_add, container, false)
 
-        high = getString(R.string.priority_high)
-        medium = getString(R.string.priority_medium)
-        low = getString(R.string.priority_low)
-
         setHasOptionsMenu(true)
         view.priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
 
         view.text_new_date.setOnClickListener {
             showDatePickerDialog()
         }
-        setupObserver()
+        setupObserver(view)
 
         view.text_new_time.setOnClickListener {
             showTimePickerDialog()
@@ -108,25 +102,29 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         }
     }
 
-    private fun setupObserver(){
+    private fun setupObserver(view: View){
         mToDoViewModel.taskId.observe(requireActivity(), {
             if(deadLine.isDateReady() && deadLine.isTimeReady() ){
-                createWorkManager(newData.copy(id = it))
+                createWorkManager(newData.copy(id = it), view)
             }else{
                 Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun createWorkManager(toDoData: ToDoData){
+    private fun createWorkManager(toDoData: ToDoData, view: View){
         val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime)
         val data = Data.Builder()
+        val stringPriority = view.priorities_spinner.selectedItem.toString()
+        val stringDeadLine =
+            " ${view.context.getString(R.string.deadline)}: " +
+                    "${view.text_new_date.text} " +
+                    "${view.text_new_time.text}"
 
-        data.putString(EXTRA_TASK_NAME, toDoData.title)
-        data.putString(EXTRA_TASK_PRIORITY,
-            mSharedViewModel.parsePriorityToResInt(toDoData.priority, high, medium, low)
-        )
-        data.putInt(EXTRA_TASK_ID, toDoData.id)
+        data.putString(ToDoConstants.EXTRA_TASK_NAME, toDoData.title)
+        data.putString(ToDoConstants.EXTRA_TASK_PRIORITY, stringPriority)
+        data.putString(ToDoConstants.EXTRA_TASK_DEADLINE, stringDeadLine)
+        data.putInt(ToDoConstants.EXTRA_TASK_ID, toDoData.id)
 
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
             .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
@@ -161,12 +159,6 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
 
     companion object {
 
-        const val EXTRA_TASK_NAME = "EXTRA_TASK_NAME"
-        const val EXTRA_TASK_ID = "EXTRA_TASK_ID"
-        const val EXTRA_TASK_PRIORITY = "EXTRA_TASK_PRIORITY"
-        const val EXTRA_TAG = "EXTRA_TAG"
-        const val SCHEDULE_EXTRA_TASK_NAME = "SCHEDULE_EXTRA_TASK_NAME"
-
         /**
          * Start [TaskAddActivity]
          * @param context previous activity
@@ -175,5 +167,4 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
             return Intent(context, AddFragment::class.java)
         }
     }
-
 }
