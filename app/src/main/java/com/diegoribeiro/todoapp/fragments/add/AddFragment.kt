@@ -12,6 +12,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -102,18 +103,31 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         }
     }
 
+    private fun verifyIfSwitcherIsChecked(view: View, switcher: SwitchCompat): Boolean{
+        return switcher.isChecked
+
+    }
+
     private fun setupObserver(view: View){
         mToDoViewModel.taskId.observe(requireActivity(), {
             if(deadLine.isDateReady() && deadLine.isTimeReady() ){
-                createWorkManager(newData.copy(id = it), view)
+                if(view.sw_deadline.isChecked) {
+                    createWorkManager(newData.copy(id = it), view, 0)
+                }
+                if(view.sw_oneDay.isChecked) {
+                    createWorkManager(newData.copy(id = it), view, 1)
+                }
+                if(view.sw_twoDays.isChecked) {
+                    createWorkManager(newData.copy(id = it), view, 2)
+                }
             }else{
                 Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun createWorkManager(toDoData: ToDoData, view: View){
-        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime)
+    private fun createWorkManager(toDoData: ToDoData, view: View, daysToReminder: Long){
+        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime?.minusDays(daysToReminder))
         val data = Data.Builder()
         val stringPriority = view.priorities_spinner.selectedItem.toString()
         val stringDeadLine =
