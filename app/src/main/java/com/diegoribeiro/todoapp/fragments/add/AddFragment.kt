@@ -113,7 +113,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     }
 
     private fun createWorkManager(toDoData: ToDoData, view: View){
-        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime)
+        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime!!.minusHours(2))
         val data = Data.Builder()
         val stringPriority = view.priorities_spinner.selectedItem.toString()
         val stringDeadLine =
