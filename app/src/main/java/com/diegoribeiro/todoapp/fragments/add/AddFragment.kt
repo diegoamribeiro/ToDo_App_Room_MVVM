@@ -16,13 +16,10 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
@@ -111,7 +108,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private fun setupObserver(view: View){
         mToDoViewModel.taskId.observe(requireActivity(), {
             if(deadLine.isDateReady() && deadLine.isTimeReady() ){
-                if(view.sw_deadline.isChecked) {
+                if(view.sw_inDay.isChecked) {
                     createWorkManager(newData.copy(id = it), view, 0)
                 }
                 if(view.sw_oneDay.isChecked) {

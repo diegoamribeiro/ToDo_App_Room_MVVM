@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
-        android:text="Reminder me"
+        android:text="@string/reminder_me"
         />
 
 
@@ -99,26 +99,24 @@
             android:id="@+id/sw_twoDays"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            app:switchPadding="8dp"
-            android:text="2 days"/>
+            android:layout_marginEnd="10dp"
+            app:switchPadding="4dp"
+            android:text="@string/two_days"/>
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sw_oneDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            app:switchPadding="8dp"
-            android:text="1 days"/>
+            android:layout_marginEnd="10dp"
+            app:switchPadding="4dp"
+            android:text="@string/one_days"/>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sw_deadline"
+            android:id="@+id/sw_inDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:switchPadding="8dp"
-            android:text="Deadline"/>
-
-
+            app:switchPadding="4dp"
+            android:text="@string/two_hours"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
