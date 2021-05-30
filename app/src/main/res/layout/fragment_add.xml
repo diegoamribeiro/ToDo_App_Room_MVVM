@@ -112,7 +112,7 @@
             android:text="@string/one_days"/>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sw_inDay"
+            android:id="@+id/sw_twoHours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:switchPadding="4dp"
