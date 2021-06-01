@@ -96,7 +96,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = listAdapter.dataList[viewHolder.adapterPosition]
                 mToDoViewModel.deleteItem(itemToDelete)
-                mToDoWorkManager.workManager.cancelAllWorkByTag(itemToDelete.title)
+                mToDoWorkManager.workManager.cancelAllWorkByTag(itemToDelete.id.toString() + itemToDelete.title)
 
                 listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 restoreDeletedItem(viewHolder.itemView, itemToDelete)
