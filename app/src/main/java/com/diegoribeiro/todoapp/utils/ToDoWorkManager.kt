@@ -48,9 +48,8 @@ class ToDoWorkManager(val workManager: WorkManager) {
         val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
             .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
             .setInputData(data.build())
-            .addTag(toDoData.title)
+            .addTag(toDoData.id.toString() + toDoData.title)
             .build()
-
         workManager.enqueue(workRequest)
     }
 
