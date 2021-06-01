@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.work.WorkManager
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
@@ -23,6 +24,7 @@ import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
+import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
 import java.time.OffsetDateTime
@@ -33,6 +35,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
     private var deadLine: ToDoDateTime = ToDoDateTime()
+    private var mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +81,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         val message: String = resources.getString(R.string.are_you_sure)
         val removed: String = resources.getString(R.string.removed)
         dialog.setPositiveButton(R.string.yes){_,_ ->
+            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.title)
             mToDoViewModel.deleteItem(args.currentItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
             Toast.makeText(requireContext(), "${args.currentItem.title} $removed!", Toast.LENGTH_SHORT).show()
@@ -98,12 +102,17 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription, mDate, mTime)
         if (validation){
-            mToDoViewModel.updateData(
-                    ToDoData(
-                            args.currentItem.id, mTitle,
-                            mSharedViewModel.parseIntToPriority(mPriority),
-                            mDescription, mSharedViewModel.setDeadLine(deadLine)))
+            val updatedItem = ToDoData(
+                args.currentItem.id, mTitle,
+                mSharedViewModel.parseIntToPriority(mPriority),
+                mDescription, mSharedViewModel.setDeadLine(deadLine)
+            )
+            mToDoViewModel.updateData(updatedItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+
+            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.title)
+            mToDoWorkManager.createWorkManager(updatedItem, requireView())
+
             Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
@@ -130,6 +139,16 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
         current_text_time.text = deadLine.getTime()
+    }
+
+    private fun setupObserver(view: View){
+        mToDoViewModel.taskId.observe(requireActivity(), {
+            if(deadLine.isDateReady() && deadLine.isTimeReady() ){
+                mToDoWorkManager.createWorkManager(args.currentItem.copy(id = it), view)
+            }else{
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun dateToString (dateTime: OffsetDateTime): String{
