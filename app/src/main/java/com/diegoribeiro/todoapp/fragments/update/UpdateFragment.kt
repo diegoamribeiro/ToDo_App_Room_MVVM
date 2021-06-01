@@ -81,7 +81,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         val message: String = resources.getString(R.string.are_you_sure)
         val removed: String = resources.getString(R.string.removed)
         dialog.setPositiveButton(R.string.yes){_,_ ->
-            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.title)
+            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.id.toString() + args.currentItem.title)
             mToDoViewModel.deleteItem(args.currentItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
             Toast.makeText(requireContext(), "${args.currentItem.title} $removed!", Toast.LENGTH_SHORT).show()
@@ -110,7 +110,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
             mToDoViewModel.updateData(updatedItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
 
-            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.title)
+            mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.id.toString() + args.currentItem.title)
             mToDoWorkManager.createWorkManager(updatedItem, requireView())
 
             Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
