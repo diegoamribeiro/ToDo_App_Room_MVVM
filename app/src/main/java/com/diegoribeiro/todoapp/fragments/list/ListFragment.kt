@@ -85,6 +85,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             R.id.menu_delete_all -> confirmRemoval()
             R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
+            R.id.menu_datetime -> mToDoViewModel.sortByDateTime.observe(this, {listAdapter.setData(it)})
 
         }
         return super.onOptionsItemSelected(item)

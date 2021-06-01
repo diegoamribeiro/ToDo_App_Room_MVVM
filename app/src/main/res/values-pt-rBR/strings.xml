@@ -8,7 +8,7 @@
     <string name="no_data">Sem Dados</string>
     <string name="add_button">add_button</string>
     <string name="search">Buscar</string>
-    <string name="sort_by">Filtrar</string>
+    <string name="sort_by">Classificar</string>
     <string name="priority_high">Alta</string>
     <string name="priority_low">Baixa</string>
     <string name="priority_medium">Média</string>

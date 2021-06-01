@@ -20,6 +20,7 @@ class ToDoViewModel(application: Application): AndroidViewModel(application) {
     val getAllData: LiveData<List<ToDoData>>
     val sortByHighPriority: LiveData<List<ToDoData>>
     val sortByLowPriority: LiveData<List<ToDoData>>
+    val sortByDateTime: LiveData<List<ToDoData>>
 
     init {
         taskId
@@ -27,6 +28,7 @@ class ToDoViewModel(application: Application): AndroidViewModel(application) {
         getAllData = repository.getAllData
         sortByHighPriority = repository.sortByHighPriority
         sortByLowPriority = repository.sortByLowPriority
+        sortByDateTime = repository.sortByDateTime
     }
 
     fun insert(toDoData: ToDoData){
