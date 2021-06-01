@@ -15,13 +15,10 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
@@ -31,6 +28,7 @@ import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.NotificationWorkManager
+import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
@@ -46,7 +44,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private val mSharedViewModel: SharedViewModel by viewModels()
     private var deadLine: ToDoDateTime = ToDoDateTime()
     private lateinit var newData: ToDoData
-    private val workManager = WorkManager.getInstance()
+    private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,34 +103,11 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     private fun setupObserver(view: View){
         mToDoViewModel.taskId.observe(requireActivity(), {
             if(deadLine.isDateReady() && deadLine.isTimeReady() ){
-                createWorkManager(newData.copy(id = it), view)
+                mToDoWorkManager.createWorkManager(newData.copy(id = it), view)
             }else{
-                Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun createWorkManager(toDoData: ToDoData, view: View){
-        val timeTilFuture = ChronoUnit.MILLIS.between(OffsetDateTime.now(), toDoData.dateTime!!.minusHours(2))
-        val data = Data.Builder()
-        val stringPriority = view.priorities_spinner.selectedItem.toString()
-        val stringDeadLine =
-            " ${view.context.getString(R.string.deadline)}: " +
-                    "${view.text_new_date.text} " +
-                    "${view.text_new_time.text}"
-
-        data.putString(ToDoConstants.EXTRA_TASK_NAME, toDoData.title)
-        data.putString(ToDoConstants.EXTRA_TASK_PRIORITY, stringPriority)
-        data.putString(ToDoConstants.EXTRA_TASK_DEADLINE, stringDeadLine)
-        data.putInt(ToDoConstants.EXTRA_TASK_ID, toDoData.id)
-
-        val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
-            .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
-            .setInputData(data.build())
-            .addTag(toDoData.title)
-            .build()
-
-        workManager.enqueue(workRequest)
     }
 
     private fun showDatePickerDialog() {
