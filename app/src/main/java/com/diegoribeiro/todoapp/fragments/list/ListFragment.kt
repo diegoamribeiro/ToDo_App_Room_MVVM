@@ -9,7 +9,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,7 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
-import com.diegoribeiro.todoapp.fragments.add.AddFragment
+import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
@@ -38,7 +37,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
 
-    private val workManager = WorkManager.getInstance()
+    private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,7 +96,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val itemToDelete = listAdapter.dataList[viewHolder.adapterPosition]
                 mToDoViewModel.deleteItem(itemToDelete)
-                workManager.cancelAllWorkByTag(itemToDelete.title)
+                mToDoWorkManager.workManager.cancelAllWorkByTag(itemToDelete.title)
 
                 listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 restoreDeletedItem(viewHolder.itemView, itemToDelete)
@@ -113,6 +112,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         )
         snackBar.setAction(R.string.undo){
             mToDoViewModel.insert(deletedItem)
+
+            mToDoWorkManager.createWorkManager(deletedItem.copy(id = deletedItem.id), view)
         }
         snackBar.show()
     }
