@@ -69,6 +69,55 @@
         app:layout_constraintTop_toBottomOf="@id/current_priorities_spinner"
         app:drawableEndCompat="@drawable/ic_time" />
 
+    <TextView
+        android:id="@+id/tv_reminders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="3dp"
+        app:layout_constraintTop_toBottomOf="@id/current_text_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:text="@string/reminder_me"
+        />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_switches"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_reminders"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/current_sw_twoDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:switchPadding="4dp"
+            android:text="@string/two_days"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/current_sw_oneDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:switchPadding="4dp"
+            android:text="@string/one_days"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/current_sw_twoHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:switchPadding="4dp"
+            android:text="@string/two_hours"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <EditText
         android:id="@+id/current_description_et"
         android:layout_width="0dp"
@@ -85,7 +134,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/current_text_time"
+        app:layout_constraintTop_toBottomOf="@+id/linear_switches"
         android:autofillHints="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TimePicker
@@ -25,6 +26,7 @@ import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
+import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
 import java.time.OffsetDateTime
@@ -82,7 +84,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         val removed: String = resources.getString(R.string.removed)
         dialog.setPositiveButton(R.string.yes){_,_ ->
             mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.id.toString() + args.currentItem.title)
-            mToDoViewModel.deleteItem(args.currentItem)
+                        mToDoViewModel.deleteItem(args.currentItem)
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
             Toast.makeText(requireContext(), "${args.currentItem.title} $removed!", Toast.LENGTH_SHORT).show()
         }
@@ -111,12 +113,30 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
 
             mToDoWorkManager.workManager.cancelAllWorkByTag(args.currentItem.id.toString() + args.currentItem.title)
-            mToDoWorkManager.createWorkManager(updatedItem, requireView())
+            setupObserver(requireView(), updatedItem)
 
             Toast.makeText(requireContext(), " ${args.currentItem.title}", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun setupObserver(view: View, item: ToDoData){
+        mToDoViewModel.taskId.observe(requireActivity(), {
+            if(deadLine.isDateReady() && deadLine.isTimeReady() ){
+                if(view.sw_twoHours.isChecked) {
+                    mToDoWorkManager.createWorkManager(item.copy(id = it), view, 0, 2)
+                }
+                if(view.sw_oneDay.isChecked) {
+                    mToDoWorkManager.createWorkManager(item.copy(id = it), view, 1, 0)
+                }
+                if(view.current_sw_twoDays.isChecked) {
+                    mToDoWorkManager.createWorkManager(item.copy(id = it), view, 2, 0)
+                }
+            }else{
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun showDatePickerDialog() {
@@ -144,7 +164,7 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     private fun setupObserver(view: View){
         mToDoViewModel.taskId.observe(requireActivity(), {
             if(deadLine.isDateReady() && deadLine.isTimeReady() ){
-                mToDoWorkManager.createWorkManager(args.currentItem.copy(id = it), view)
+                mToDoWorkManager.createWorkManager(args.currentItem.copy(id = it), view,0,2)
             }else{
                 Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
             }

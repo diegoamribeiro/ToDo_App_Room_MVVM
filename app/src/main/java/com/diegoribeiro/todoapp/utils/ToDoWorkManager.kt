@@ -22,7 +22,7 @@ class ToDoWorkManager(val workManager: WorkManager) {
 
     private var deadLine: ToDoDateTime = ToDoDateTime()
 
-    fun createWorkManager(toDoData: ToDoData, view: View){
+    fun createWorkManager(toDoData: ToDoData, view: View, daysToReminder: Int, hoursToReminder: Int){
         if (toDoData.dateTime!! > OffsetDateTime.now()){
             deadLine = ToDoDateTime(
                 toDoData.dateTime!!.dayOfMonth,
