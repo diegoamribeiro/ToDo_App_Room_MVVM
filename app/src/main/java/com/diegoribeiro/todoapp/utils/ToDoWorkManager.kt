@@ -1,10 +1,8 @@
 package com.diegoribeiro.todoapp.utils
 
-import android.content.Context
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.viewModels
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -24,38 +22,39 @@ class ToDoWorkManager(val workManager: WorkManager) {
 
     private var deadLine: ToDoDateTime = ToDoDateTime()
 
-    fun createWorkManager(toDoData: ToDoData, view: View, daysToReminder: Long, hoursToReminder: Long){
-        deadLine = ToDoDateTime(
-            toDoData.dateTime!!.dayOfMonth,
-            toDoData.dateTime!!.monthValue,
-            toDoData.dateTime!!.year,
-            toDoData.dateTime!!.hour,
-            toDoData.dateTime!!.minute
-        )
+    fun createWorkManager(toDoData: ToDoData, view: View){
+        if (toDoData.dateTime!! > OffsetDateTime.now()){
+            deadLine = ToDoDateTime(
+                toDoData.dateTime!!.dayOfMonth,
+                toDoData.dateTime!!.monthValue,
+                toDoData.dateTime!!.year,
+                toDoData.dateTime!!.hour,
+                toDoData.dateTime!!.minute
+            )
 
-        val timeTilFuture = ChronoUnit.MILLIS.between(
-            OffsetDateTime.now(),
-            toDoData.dateTime?.minusDays(daysToReminder)?.minusHours(hoursToReminder)
-        )
-        val data = Data.Builder()
-        val stringPriority = parsePriorityToString(view, toDoData.priority)
-        val stringDeadLine =
-            " ${view.context.getString(R.string.deadline)}: " +
-                    "${deadLine.getDate()} " +
-                    "${deadLine.getTime()}"
+            val timeTilFuture = ChronoUnit.MILLIS.between(
+                OffsetDateTime.now(),
+                toDoData.dateTime?.minusHours(2)
+            )
+            val data = Data.Builder()
+            val stringPriority = parsePriorityToString(view, toDoData.priority)
+            val stringDeadLine =
+                " ${view.context.getString(R.string.deadline)}: " +
+                        "${deadLine.getDate()} " +
+                        "${deadLine.getTime()}"
 
-        data.putString(ToDoConstants.EXTRA_TASK_NAME, toDoData.title)
-        data.putString(ToDoConstants.EXTRA_TASK_PRIORITY, stringPriority)
-        data.putString(ToDoConstants.EXTRA_TASK_DEADLINE, stringDeadLine)
-        data.putInt(ToDoConstants.EXTRA_TASK_ID, toDoData.id)
+            data.putString(ToDoConstants.EXTRA_TASK_NAME, toDoData.title)
+            data.putString(ToDoConstants.EXTRA_TASK_PRIORITY, stringPriority)
+            data.putString(ToDoConstants.EXTRA_TASK_DEADLINE, stringDeadLine)
+            data.putInt(ToDoConstants.EXTRA_TASK_ID, toDoData.id)
 
-        val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
-            .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
-            .setInputData(data.build())
-            .addTag(toDoData.title)
-            .build()
-
-        workManager.enqueue(workRequest)
+            val workRequest = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
+                .setInitialDelay(timeTilFuture, TimeUnit.MILLISECONDS)
+                .setInputData(data.build())
+                .addTag(toDoData.id.toString() + toDoData.title)
+                .build()
+            workManager.enqueue(workRequest)
+        }
     }
 
     private fun parsePriorityToString(view: View, priority: Priority): String {

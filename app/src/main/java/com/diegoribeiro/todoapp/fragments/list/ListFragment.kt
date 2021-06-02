@@ -25,6 +25,8 @@ import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
+import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -83,6 +85,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             R.id.menu_delete_all -> confirmRemoval()
             R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
+            R.id.menu_datetime -> mToDoViewModel.sortByDateTime.observe(this, {listAdapter.setData(it)})
 
         }
         return super.onOptionsItemSelected(item)

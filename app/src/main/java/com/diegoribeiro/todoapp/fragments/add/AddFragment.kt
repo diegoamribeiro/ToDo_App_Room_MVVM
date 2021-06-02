@@ -17,19 +17,26 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.diegoribeiro.todoapp.R
+import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
+import com.diegoribeiro.todoapp.utils.NotificationWorkManager
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
 import kotlinx.android.synthetic.main.row_layout.*
+import java.time.OffsetDateTime
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -113,7 +120,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
                     mToDoWorkManager.createWorkManager(newData.copy(id = it), view, 2, 0)
                 }
             }else{
-                Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
             }
         })
     }

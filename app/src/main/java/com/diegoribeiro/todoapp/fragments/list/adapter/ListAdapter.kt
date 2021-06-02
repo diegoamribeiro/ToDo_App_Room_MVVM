@@ -16,6 +16,7 @@ import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
 import kotlinx.android.synthetic.main.row_layout.view.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.Period
 
@@ -74,16 +75,27 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
         if (date != null){
             val dateDeadline = date.toLocalDate()
             val period = Period.between(LocalDate.now(),dateDeadline)
-            if (period.months < 0){
-                holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
-            } else if (period.months == 0){
-                when(period.days){
-                    in 0..3 ->
-                        holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
-                    in -31..-1 ->
-                        holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
-                    else ->
-                        return
+
+            when {
+                period.months < 0 -> holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                period.months == 0 -> {
+                    when (period.days) {
+                        0 -> {
+                            if (LocalDateTime.now().hour > date.hour) {
+                                holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                            } else {
+                                if (LocalDateTime.now().minute > date.minute) {
+                                    holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                                } else holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
+                            }
+                        }
+                        in 1..3 ->
+                            holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
+                        in -31..-1 ->
+                            holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                        else ->
+                            return
+                    }
                 }
             }
         }else{
