@@ -11,6 +11,28 @@
     app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <group android:checkableBehavior="none">
+        <item
+            android:visible="true"
+            android:id="@+id/menu_datetime2"
+            android:icon="@drawable/ic_calendar_white"
+            android:title="@string/date"
+            app:showAsAction="ifRoom">
+            <menu>
+                <item
+                    android:id="@+id/menu_today_tasks"
+                    android:title="@string/today_tasks" />
+                <item
+                    android:id="@+id/menu_tomorrow_tasks"
+                    android:title="@string/tomorrow_tasks" />
+                <item
+                    android:id="@+id/menu_all_tasks"
+                    android:title="@string/all_tasks" />
+            </menu>
+
+        </item>
+    </group>
+
+    <group android:checkableBehavior="none">
         <item android:id="@+id/menu_sortBy"
             android:title="@string/sort_by">
             <menu>

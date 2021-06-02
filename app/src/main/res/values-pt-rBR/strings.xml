@@ -48,4 +48,7 @@
     <string name="date">Data</string>
     <string name="time">Hora</string>
     <string name="calendar_icon">Ícone de calendário</string>
+    <string name="today_tasks">Tarefas de Hoje</string>
+    <string name="tomorrow_tasks">Tarefas de Amanhã</string>
+    <string name="all_tasks">Todas as Tarefas</string>
 </resources>

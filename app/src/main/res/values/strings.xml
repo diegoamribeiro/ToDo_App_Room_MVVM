@@ -49,4 +49,7 @@
     <!--Notifcation Channel-->
     <string name="notification_channel_name">Channel Name</string>
     <string name="notification_name">Notification Name</string>
+    <string name="today_tasks">Today tasks</string>
+    <string name="tomorrow_tasks">Tomorrow tasks</string>
+    <string name="all_tasks">All Tasks</string>
 </resources>
