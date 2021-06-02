@@ -28,6 +28,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -81,11 +82,26 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        lateinit var stringSearch: String
         when(item.itemId){
             R.id.menu_delete_all -> confirmRemoval()
             R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_datetime -> mToDoViewModel.sortByDateTime.observe(this, {listAdapter.setData(it)})
+            R.id.menu_today_tasks -> {
+                stringSearch = LocalDate.now().toString()
+                searchThroughDatabaseByDate(stringSearch)
+            }
+            R.id.menu_tomorrow_tasks -> {
+                stringSearch = LocalDate.now().plusDays(1).toString()
+                searchThroughDatabaseByDate(stringSearch)
+            }
+            R.id.menu_all_tasks -> {
+            mToDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
+                mSharedViewModel.verifyEmptyList(data)
+                listAdapter.setData(data)
+            })
+            }
 
         }
         return super.onOptionsItemSelected(item)
@@ -147,6 +163,17 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         val searchQuery = "%$query%"
 
         mToDoViewModel.searchDatabase(searchQuery).observeOnce(this, { list ->
+            list?.let {
+                //Log.d("**ListFragment", "Search through database")
+                listAdapter.setData(it)
+            }
+        })
+    }
+
+    private fun searchThroughDatabaseByDate(query: String){
+        val searchQuery = "%$query%"
+
+        mToDoViewModel.searchDatabaseByDate(searchQuery).observeOnce(this, { list ->
             list?.let {
                 //Log.d("**ListFragment", "Search through database")
                 listAdapter.setData(it)
