@@ -34,12 +34,18 @@ class ToDoWorkManager(val workManager: WorkManager) {
                 OffsetDateTime.now(),
                 toDoData.dateTime?.minusHours(2)
             )
+
+            val timeTilInstant = ChronoUnit.MILLIS.between(
+                OffsetDateTime.now(),
+                toDoData.dateTime!!
+            )
+
             val data = Data.Builder()
             val stringPriority = parsePriorityToString(view, toDoData.priority)
             val stringDeadLine =
                 " ${view.context.getString(R.string.deadline)}: " +
                         "${deadLine.getDate()} " +
-                        "${deadLine.getTime()}"
+                        deadLine.getTime()
 
             data.putString(ToDoConstants.EXTRA_TASK_NAME, toDoData.title)
             data.putString(ToDoConstants.EXTRA_TASK_PRIORITY, stringPriority)
@@ -51,7 +57,15 @@ class ToDoWorkManager(val workManager: WorkManager) {
                 .setInputData(data.build())
                 .addTag(toDoData.id.toString() + toDoData.title)
                 .build()
+
+            val workRequestInstant = OneTimeWorkRequest.Builder(NotificationWorkManager::class.java)
+                .setInitialDelay(timeTilInstant, TimeUnit.MILLISECONDS)
+                .setInputData(data.build())
+                .addTag(toDoData.id.toString() + toDoData.title)
+                .build()
+
             workManager.enqueue(workRequest)
+            workManager.enqueue(workRequestInstant)
         }
     }
 

@@ -158,6 +158,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setPositiveButton(R.string.yes){_,_ ->
             mToDoViewModel.deleteAll()
+            mToDoWorkManager.workManager.cancelAllWork()
             Toast.makeText(requireContext(), R.string.all_items_removed, Toast.LENGTH_SHORT).show()
         }
         dialog.setNegativeButton(R.string.no){_, _, ->}
