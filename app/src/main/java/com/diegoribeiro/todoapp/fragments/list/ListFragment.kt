@@ -10,8 +10,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,11 +27,9 @@ import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
-import kotlinx.coroutines.coroutineScope
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -43,7 +39,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
     private lateinit var userPreferences: UserPreferences
-    private lateinit var isGridEnabled: RecyclerView.LayoutManager
+    private var isGridEnabled: Boolean? = null
 
     private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
@@ -61,6 +57,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         userPreferences = UserPreferences(view.context)
 
         setupRecyclerView(view)
+        observeData()
 
         mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner,  {
             showEmptyDatabaseView(it)
@@ -73,7 +70,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         setHasOptionsMenu(true)
         return view
     }
-
 
     private fun setupRecyclerView(view: View){
         recyclerView = view.recyclerListView
@@ -91,17 +87,20 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun observeData(){
         userPreferences.userLayoutPreference.asLiveData().observe(viewLifecycleOwner,{ it ->
-            isGridEnabled = if(it) StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL) else LinearLayoutManager(requireContext())
+            if(it){
+                recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            } else{
+                recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            }
         } )
     }
 
-    private fun setupLayout(state: Boolean): RecyclerView.LayoutManager{
-        if (state == true){
-            recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        }else{
-            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupLayout(state: Boolean){
+        isGridEnabled = state
+        GlobalScope.launch {
+            userPreferences.storePreferenceLayout(isGridEnabled!!)
         }
-        return recyclerView.layoutManager!!
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
