@@ -9,6 +9,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +23,7 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.preferences.UserPreferences
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
@@ -28,6 +32,8 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
+import kotlinx.coroutines.coroutineScope
+import kotlin.coroutines.coroutineContext
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -36,6 +42,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val listAdapter: ListAdapter by lazy { ListAdapter() }
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
+    private lateinit var userPreferences: UserPreferences
+    private lateinit var isGridEnabled: RecyclerView.LayoutManager
 
     private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
@@ -49,6 +57,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         view.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
+
+        userPreferences = UserPreferences(view.context)
 
         setupRecyclerView(view)
 
@@ -68,7 +78,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerView(view: View){
         recyclerView = view.recyclerListView
         recyclerView.adapter = listAdapter
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.itemAnimator = SlideInUpAnimator().apply {
             addDuration = 300
         }
@@ -80,16 +89,35 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         })
     }
 
+    private fun observeData(){
+        userPreferences.userLayoutPreference.asLiveData().observe(viewLifecycleOwner,{ it ->
+            isGridEnabled = if(it) StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL) else LinearLayoutManager(requireContext())
+        } )
+    }
+
+    private fun setupLayout(state: Boolean): RecyclerView.LayoutManager{
+        if (state == true){
+            recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        }else{
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        }
+        return recyclerView.layoutManager!!
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.menu_delete_all -> confirmRemoval()
             R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, {listAdapter.setData(it)})
             R.id.menu_datetime -> mToDoViewModel.sortByDateTime.observe(this, {listAdapter.setData(it)})
+            R.id.menu_gridView -> setupLayout(true)
+            R.id.menu_listView -> setupLayout(false)
 
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 
     private fun swipeToDelete(recyclerView: RecyclerView){
         val swipeToDeleteCallback = object : SwipeToDelete(){

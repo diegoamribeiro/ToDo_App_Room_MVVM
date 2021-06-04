@@ -29,20 +29,20 @@
             </menu>
         </item>
     </group>
-<!--    <group android:checkableBehavior="none">-->
-<!--        <item android:id="@+id/menu_viewBy"-->
-<!--            android:title="@string/view_by">-->
-<!--            <menu>-->
-<!--                <item android:id="@+id/menu_gridView"-->
-<!--                    android:title="@string/grid_view"-->
-<!--                    android:icon="@drawable/ic_view_grid"/>-->
+    <group android:checkableBehavior="none">
+        <item android:id="@+id/menu_viewBy"
+            android:title="@string/view_by">
+            <menu>
+                <item android:id="@+id/menu_gridView"
+                    android:title="@string/grid_view"
+                    android:icon="@drawable/ic_view_grid"/>
 
-<!--                <item android:id="@+id/menu_listView"-->
-<!--                    android:title="@string/list_view"-->
-<!--                    android:icon="@drawable/ic_view_list"/>-->
-<!--            </menu>-->
-<!--        </item>-->
-<!--    </group>-->
+                <item android:id="@+id/menu_listView"
+                    android:title="@string/list_view"
+                    android:icon="@drawable/ic_view_list"/>
+            </menu>
+        </item>
+    </group>
     <item
         android:id="@+id/menu_delete_all"
         android:title="@string/delete_all"
