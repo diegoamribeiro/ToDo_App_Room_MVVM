@@ -15,6 +15,5 @@ data class ToDoData(
         var title: String,
         var priority: Priority,
         var description: String,
-        @Ignore
         var dateTime: OffsetDateTime? = null
 ): Parcelable
