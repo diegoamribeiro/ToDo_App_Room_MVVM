@@ -2,6 +2,7 @@ package com.diegoribeiro.todoapp.data.models
 
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.time.OffsetDateTime
@@ -14,5 +15,6 @@ data class ToDoData(
         var title: String,
         var priority: Priority,
         var description: String,
+        @Ignore
         var dateTime: OffsetDateTime? = null
 ): Parcelable

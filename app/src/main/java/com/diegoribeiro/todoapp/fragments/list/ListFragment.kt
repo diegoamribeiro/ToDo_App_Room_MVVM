@@ -1,6 +1,7 @@
 package com.diegoribeiro.todoapp.fragments.list
 
 import android.app.AlertDialog
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -27,6 +28,7 @@ import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
+import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,6 +57,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         userPreferences = UserPreferences(view.context)
+
 
         setupRecyclerView(view)
         observeData()
@@ -86,7 +89,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun observeData(){
-        userPreferences.userLayoutPreference.asLiveData().observe(viewLifecycleOwner,{ it ->
+        userPreferences.userLayoutPreference.asLiveData().observe(viewLifecycleOwner,{
             if(it){
                 recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             } else{
@@ -100,7 +103,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         GlobalScope.launch {
             userPreferences.storePreferenceLayout(isGridEnabled!!)
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -111,12 +113,9 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             R.id.menu_datetime -> mToDoViewModel.sortByDateTime.observe(this, {listAdapter.setData(it)})
             R.id.menu_gridView -> setupLayout(true)
             R.id.menu_listView -> setupLayout(false)
-
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 
     private fun swipeToDelete(recyclerView: RecyclerView){
         val swipeToDeleteCallback = object : SwipeToDelete(){
@@ -125,8 +124,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 val itemToDelete = listAdapter.dataList[viewHolder.adapterPosition]
                 mToDoViewModel.deleteItem(itemToDelete)
                 mToDoWorkManager.workManager.cancelAllWorkByTag(itemToDelete.id.toString() + itemToDelete.title)
-
-                listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+                //listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 restoreDeletedItem(viewHolder.itemView, itemToDelete)
             }
         }
@@ -136,7 +134,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun restoreDeletedItem(view: View, deletedItem: ToDoData){
         val snackBar = Snackbar.make(
-                view, "Deleted '${deletedItem.title}'", Snackbar.LENGTH_SHORT
+                view, "Deleted '${deletedItem.title}'", Snackbar.LENGTH_LONG
         )
         snackBar.setAction(R.string.undo){
             mToDoViewModel.insert(deletedItem)
@@ -175,7 +173,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         mToDoViewModel.searchDatabase(searchQuery).observeOnce(this, { list ->
             list?.let {
-                //Log.d("**ListFragment", "Search through database")
                 listAdapter.setData(it)
             }
         })

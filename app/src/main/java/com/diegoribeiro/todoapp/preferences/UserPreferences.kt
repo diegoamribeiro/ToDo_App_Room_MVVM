@@ -9,10 +9,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+
 const val LAYOUT_PREFERENCES = "layout_preferences"
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = LAYOUT_PREFERENCES)
+
 class UserPreferences(context: Context) {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = LAYOUT_PREFERENCES)
+
     private val mDatastore: DataStore<Preferences> = context.dataStore
 
     suspend fun storePreferenceLayout(layout: Boolean){
@@ -24,13 +27,6 @@ class UserPreferences(context: Context) {
     val userLayoutPreference: Flow<Boolean> = mDatastore.data.map {
         it[LAYOUT_KEY] ?: true
     }
-
-
-
-
-
-
-
 
     companion object{
         val LAYOUT_KEY = booleanPreferencesKey("GRID_LAYOUT")

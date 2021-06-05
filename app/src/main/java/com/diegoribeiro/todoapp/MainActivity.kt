@@ -1,13 +1,9 @@
 package com.diegoribeiro.todoapp
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.diegoribeiro.todoapp.feature.DatePickerFragment
 
 class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,4 +18,7 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+
+
 }
+

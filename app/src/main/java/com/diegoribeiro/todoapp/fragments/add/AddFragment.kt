@@ -1,6 +1,7 @@
 package com.diegoribeiro.todoapp.fragments.add
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
