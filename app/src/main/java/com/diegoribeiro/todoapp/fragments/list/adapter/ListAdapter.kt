@@ -38,19 +38,15 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.title_txt.text = dataList[position].title
         holder.itemView.description_txt.text = dataList[position].description
-        holder.itemView.deadline_txt.text = dateTimeToString(dataList[position].dateTime!!)
+        holder.itemView.deadline_date.text = dateTimeToString(dataList[position].dateTime!!)
 
-        when(dataList[position].priority){
-            Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
-            Priority.MEDIUM -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.yellow))
-            Priority.LOW -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.green))
-        }
         holder.itemView.row_background.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.itemView.findNavController().navigate(action)
         }
 
         drawCalendarIcon(holder, dataList[position].dateTime!!)
+        drawPriorityLine(holder, dataList[position].priority)
     }
 
     fun setData(toDoList: List<ToDoData>){
@@ -69,6 +65,20 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
             dateTime.minute
         )
         return toDoDateTime.getDateTime()
+    }
+
+    private fun drawPriorityLine(holder: MyViewHolder, priority: Priority){
+        when (priority) {
+            Priority.HIGH -> {
+                holder.itemView.priority_line.setBackgroundColor(holder.itemView.resources.getColor(R.color.red))
+            }
+            Priority.MEDIUM -> {
+                holder.itemView.priority_line.setBackgroundColor(holder.itemView.resources.getColor(R.color.yellow))
+            }
+            else -> {
+                holder.itemView.priority_line.setBackgroundColor(holder.itemView.resources.getColor(R.color.green))
+            }
+        }
     }
 
     private fun drawCalendarIcon(holder: ListAdapter.MyViewHolder, date: OffsetDateTime){

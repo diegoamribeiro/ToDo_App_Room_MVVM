@@ -14,10 +14,10 @@ data class ToDoDateTime(
     fun isTimeReady(): Boolean{
         return hour != 0
     }
+
     fun getDateTime(): String{
         return "${String.format("%02d", day)}/" +
-                "${String.format("%02d", month)}/" +
-                "$year - " +
+                "${String.format("%02d", month)} -" +
                 "${String.format("%02d", hour)}:" +
                 String.format("%02d", minute)
     }

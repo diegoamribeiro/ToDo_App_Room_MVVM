@@ -1,70 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="4dp">
+    android:layout_margin="5dp"
+    android:backgroundTint="@android:color/transparent"
+    >
+
+<androidx.cardview.widget.CardView
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/row_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/item_background"
-        android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        >
+
+        <View
+            android:id="@+id/priority_line"
+            android:layout_width="12dp"
+            android:layout_height="0dp"
+            android:background="@color/red"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <TextView
             android:id="@+id/title_txt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/title"
-            android:textColor="@color/darkGray"
+            android:textColor="@color/darkBlue"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/priority_indicator"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/priority_line"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/description_txt"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
+            android:paddingBottom="5dp"
             android:maxLength="300"
             android:text="@string/description"
-            android:textColor="@color/darkGray"
+            android:textColor="@color/darkBlue"
             android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_txt" />
+            app:layout_constraintStart_toStartOf="@id/title_txt"
+            app:layout_constraintTop_toBottomOf="@id/title_txt"
+            />
 
         <TextView
-            android:id="@+id/deadline_txt"
+            android:id="@+id/deadline_date"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
             android:maxLength="300"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/darkBlue"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            tools:text="22/10/2021 22:00"
             app:layout_constraintTop_toBottomOf="@id/description_txt"
-            tools:text="22/10/2021 22:00" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <ImageView
             android:id="@+id/ic_calendar"
@@ -76,22 +97,11 @@
             android:contentDescription="@string/calendar_icon"
             android:foregroundGravity="left"
             android:src="@drawable/ic_calendar_black"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_txt" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/priority_indicator"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:cardBackgroundColor="@color/red"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

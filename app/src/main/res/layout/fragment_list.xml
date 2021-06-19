@@ -8,7 +8,9 @@
     android:id="@+id/listLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.list.ListFragment">
+    tools:context=".fragments.list.ListFragment"
+    android:background="@color/lightGray"
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -23,7 +25,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/row_layout"
+        tools:itemCount="10"
+        android:background="@color/lightGray"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
