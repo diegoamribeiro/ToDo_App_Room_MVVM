@@ -31,7 +31,7 @@ import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private val args: UpdateFragmentArgs by navArgs<UpdateFragmentArgs>()
+    private val args: UpdateFragmentArgs by navArgs()
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
     private var deadLine: ToDoDateTime = ToDoDateTime()
