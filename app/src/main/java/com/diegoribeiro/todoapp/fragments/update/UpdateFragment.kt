@@ -22,15 +22,17 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.databinding.FragmentUpdateBinding
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
-import kotlinx.android.synthetic.main.fragment_update.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
+import com.diegoribeiro.todoapp.utils.viewBinding
 import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    private val binding: FragmentUpdateBinding by viewBinding()
     private val args: UpdateFragmentArgs by navArgs<UpdateFragmentArgs>()
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -47,18 +49,18 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_update, container, false)
-        view.current_title_et.setText(args.currentItem.title)
-        view.current_description_et.setText(args.currentItem.description)
-        view.current_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
-        view.current_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+        binding.currentTitleEt.setText(args.currentItem.title)
+        binding.currentDescriptionEt.setText(args.currentItem.description)
+        binding.currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
+        binding.currentPrioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
-        view.current_text_date.text = dateToString(args.currentItem.dateTime!!)
-        view.current_text_time.text = timeToString(args.currentItem.dateTime!!)
+        binding.currentTextDate.text = dateToString(args.currentItem.dateTime!!)
+        binding.currentTextTime.text = timeToString(args.currentItem.dateTime!!)
 
-        view.current_text_date.setOnClickListener { showDatePickerDialog() }
-        view.current_text_time.setOnClickListener { showTimePickerDialog() }
+        binding.currentTextDate.setOnClickListener { showDatePickerDialog() }
+        binding.currentTextTime.setOnClickListener { showTimePickerDialog() }
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -94,11 +96,11 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     }
 
     private fun updateData() {
-        val mTitle = current_title_et.text.toString()
-        val mDescription = current_description_et.text.toString()
-        val mPriority = current_priorities_spinner.selectedItemPosition
-        val mDate = current_text_date.text.toString()
-        val mTime = current_text_time.text.toString()
+        val mTitle = binding.currentTitleEt.text.toString()
+        val mDescription = binding.currentDescriptionEt.text.toString()
+        val mPriority = binding.currentPrioritiesSpinner.selectedItemPosition
+        val mDate = binding.currentTextDate.text.toString()
+        val mTime = binding.currentTextTime.text.toString()
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription, mDate, mTime)
         if (validation){
@@ -132,23 +134,24 @@ class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePick
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         deadLine = deadLine.copy(day = dayOfMonth, month = month + 1, year = year)
-        current_text_date.text = deadLine.getDate()
+        binding.currentTextDate.text = deadLine.getDate()
     }
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
-        current_text_time.text = deadLine.getTime()
+        binding.currentTextTime.text = deadLine.getTime()
     }
 
     private fun setupObserver(view: View){
-        mToDoViewModel.taskId.observe(requireActivity(), {
-            if(deadLine.isDateReady() && deadLine.isTimeReady() ){
+        mToDoViewModel.taskId.observe(requireActivity()) {
+            if (deadLine.isDateReady() && deadLine.isTimeReady()) {
                 mToDoWorkManager.createWorkManager(args.currentItem.copy(id = it), view)
-            }else{
-                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT)
+                    .show()
             }
-        })
+        }
     }
 
     private fun dateToString (dateTime: OffsetDateTime): String{

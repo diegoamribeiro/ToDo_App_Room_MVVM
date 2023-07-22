@@ -13,39 +13,38 @@ import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
+import com.diegoribeiro.todoapp.databinding.RowLayoutBinding
 import com.diegoribeiro.todoapp.fragments.list.ListFragmentDirections
-import kotlinx.android.synthetic.main.row_layout.view.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.Period
 
 @RequiresApi(Build.VERSION_CODES.O)
-class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
+class ListAdapter : RecyclerView.Adapter<ListAdapter.ItemTaskViewHolder>(){
 
     var dataList = emptyList<ToDoData>()
    // private var currentItem = UpdateFragmentDirections
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemTaskViewHolder {
+        val binding = RowLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemTaskViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return dataList.size
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemView.title_txt.text = dataList[position].title
-        holder.itemView.description_txt.text = dataList[position].description
-        holder.itemView.deadline_txt.text = dateTimeToString(dataList[position].dateTime!!)
+    override fun onBindViewHolder(holder: ItemTaskViewHolder, position: Int) {
+        holder.binding.titleTxt.text = dataList[position].title
+        holder.binding.deadlineTxt.text = dateTimeToString(dataList[position].dateTime!!)
 
         when(dataList[position].priority){
-            Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
-            Priority.MEDIUM -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.yellow))
-            Priority.LOW -> holder.itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.green))
+            Priority.HIGH -> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.red))
+            Priority.MEDIUM -> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.yellow))
+            Priority.LOW -> holder.binding.priorityIndicator.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.green))
         }
-        holder.itemView.row_background.setOnClickListener {
+        holder.binding.rowBackground.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.itemView.findNavController().navigate(action)
         }
@@ -71,35 +70,39 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
         return toDoDateTime.getDateTime()
     }
 
-    private fun drawCalendarIcon(holder: ListAdapter.MyViewHolder, date: OffsetDateTime){
+    private fun drawCalendarIcon(holder: ListAdapter.ItemTaskViewHolder, date: OffsetDateTime){
         if (date != null){
             val dateDeadline = date.toLocalDate()
             val period = Period.between(LocalDate.now(),dateDeadline)
 
             when {
-                period.months < 0 -> holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                period.months < 0 -> holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_red)
                 period.months == 0 -> {
                     when (period.days) {
                         0 -> {
                             if (LocalDateTime.now().hour > date.hour) {
-                                holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                                holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_red)
                             } else {
                                 if (LocalDateTime.now().minute > date.minute) {
-                                    holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
-                                } else holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
+                                    holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_red)
+                                } else holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_yellow)
                             }
                         }
                         in 1..3 ->
-                            holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_yellow)
+                            holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_yellow)
                         in -31..-1 ->
-                            holder.itemView.ic_calendar.setImageResource(R.drawable.ic_calendar_red)
+                            holder.binding.icCalendar.setImageResource(R.drawable.ic_calendar_red)
                         else ->
                             return
                     }
                 }
             }
         }else{
-            holder.itemView.ic_calendar.visibility = View.GONE
+            holder.binding.icCalendar.visibility = View.GONE
         }
+    }
+
+    class ItemTaskViewHolder(val binding: RowLayoutBinding) : RecyclerView.ViewHolder(binding.root){
+
     }
 }

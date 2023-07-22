@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,17 +21,18 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.fragments.list.adapter.ListAdapter
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.databinding.FragmentListBinding
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
+import com.diegoribeiro.todoapp.utils.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.view.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
+
+    private val binding: FragmentListBinding by viewBinding()
 
     private lateinit var recyclerView: RecyclerView
     private val listAdapter: ListAdapter by lazy { ListAdapter() }
@@ -44,29 +46,29 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_list, container, false)
 
-        view.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
+
+        binding.floatingActionButton.setOnClickListener {
+            NavHostFragment.findNavController(this).navigate(R.id.action_listFragment_to_addFragment)
         }
 
-        setupRecyclerView(view)
+        setupRecyclerView()
 
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner,  {
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner) {
             showEmptyDatabaseView(it)
-        })
+        }
 
         //Hide Keyboard
         hideKeyboard(requireActivity())
 
         //Set menu
         setHasOptionsMenu(true)
-        return view
+        return binding.root
     }
 
 
-    private fun setupRecyclerView(view: View){
-        recyclerView = view.recyclerListView
+    private fun setupRecyclerView(){
+        recyclerView = binding.recyclerListView
         recyclerView.adapter = listAdapter
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         recyclerView.itemAnimator = SlideInUpAnimator().apply {
@@ -74,10 +76,10 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
         swipeToDelete(recyclerView)
 
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner,  { data->
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner) { data ->
             mSharedViewModel.verifyEmptyList(data)
             listAdapter.setData(data)
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -121,11 +123,11 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun showEmptyDatabaseView(emptyDatabase: Boolean) {
         if (emptyDatabase){
-            view?.no_data_imageView?.visibility = View.VISIBLE
-            view?.no_data_textView?.visibility = View.VISIBLE
+            binding.noDataImageView.visibility = View.VISIBLE
+            binding.noDataTextView.visibility = View.VISIBLE
         }else{
-            view?.no_data_imageView?.visibility = View.INVISIBLE
-            view?.no_data_textView?.visibility = View.INVISIBLE
+            binding.noDataImageView.visibility = View.INVISIBLE
+            binding.noDataTextView.visibility = View.INVISIBLE
         }
     }
 

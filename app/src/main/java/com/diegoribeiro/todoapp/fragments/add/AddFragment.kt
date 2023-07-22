@@ -25,14 +25,12 @@ import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
 import com.diegoribeiro.todoapp.data.viewmodel.SharedViewModel
 import com.diegoribeiro.todoapp.data.viewmodel.ToDoViewModel
+import com.diegoribeiro.todoapp.databinding.FragmentAddBinding
 import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.NotificationWorkManager
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_add.view.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
-import kotlinx.android.synthetic.main.row_layout.*
+import com.diegoribeiro.todoapp.utils.viewBinding
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
@@ -40,6 +38,7 @@ import java.util.concurrent.TimeUnit
 @RequiresApi(Build.VERSION_CODES.O)
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
+    private val binding: FragmentAddBinding by viewBinding()
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
     private var deadLine: ToDoDateTime = ToDoDateTime()
@@ -55,17 +54,17 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
         val view =  inflater.inflate(R.layout.fragment_add, container, false)
 
         setHasOptionsMenu(true)
-        view.priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
-        view.text_new_date.setOnClickListener {
+        binding.textNewDate.setOnClickListener {
             showDatePickerDialog()
         }
         setupObserver(view)
 
-        view.text_new_time.setOnClickListener {
+        binding.textNewTime.setOnClickListener {
             showTimePickerDialog()
         }
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -80,11 +79,11 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     }
 
     private fun insertDataToDatabase() {
-        val mTitle = title_et.text.toString()
-        val mPriority = priorities_spinner.selectedItemPosition
-        val mDescription = description_et.text.toString()
-        val date = text_new_date.text.toString()
-        val time = text_new_time.text.toString()
+        val mTitle = binding.titleEt.text.toString()
+        val mPriority = binding.prioritiesSpinner.selectedItemPosition
+        val mDescription = binding.descriptionEt.text.toString()
+        val date = binding.textNewDate.text.toString()
+        val time = binding.textNewTime.text.toString()
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription, date, time)
 
@@ -101,13 +100,14 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     }
 
     private fun setupObserver(view: View){
-        mToDoViewModel.taskId.observe(requireActivity(), {
-            if(deadLine.isDateReady() && deadLine.isTimeReady() ){
+        mToDoViewModel.taskId.observe(requireActivity()) {
+            if (deadLine.isDateReady() && deadLine.isTimeReady()) {
                 mToDoWorkManager.createWorkManager(newData.copy(id = it), view)
-            }else{
-                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT)
+                    .show()
             }
-        })
+        }
     }
 
     private fun showDatePickerDialog() {
@@ -123,13 +123,13 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         deadLine = deadLine.copy(day = dayOfMonth, month = month + 1, year = year)
-        text_new_date.text = deadLine.getDate()
+        binding.textNewDate.text = deadLine.getDate()
     }
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         deadLine = deadLine.copy(hour = hourOfDay, minute = minute)
-        text_new_time.text = deadLine.getTime()
+        binding.textNewTime.text = deadLine.getTime()
     }
 
     companion object {
