@@ -11,15 +11,19 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.models.Priority
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
+@HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
-class SharedViewModel(application: Application) : AndroidViewModel(application){
+class SharedViewModel @Inject constructor(application: Application) : ViewModel(){
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
 

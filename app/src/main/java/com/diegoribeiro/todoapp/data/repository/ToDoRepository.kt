@@ -3,8 +3,9 @@ package com.diegoribeiro.todoapp.data.repository
 import androidx.lifecycle.LiveData
 import com.diegoribeiro.todoapp.data.ToDoDao
 import com.diegoribeiro.todoapp.data.models.ToDoData
+import javax.inject.Inject
 
-class ToDoRepository(private val toDoDao: ToDoDao) {
+class ToDoRepository @Inject constructor(private val toDoDao: ToDoDao) {
 
     val getAllData: LiveData<List<ToDoData>> = toDoDao.getAllData()
     val sortByHighPriority: LiveData<List<ToDoData>> = toDoDao.sortByHighPriority()

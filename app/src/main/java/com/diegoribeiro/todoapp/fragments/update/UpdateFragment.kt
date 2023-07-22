@@ -27,8 +27,10 @@ import com.diegoribeiro.todoapp.feature.DatePickerFragment
 import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.OffsetDateTime
 
+@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
 class UpdateFragment : Fragment() , DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 

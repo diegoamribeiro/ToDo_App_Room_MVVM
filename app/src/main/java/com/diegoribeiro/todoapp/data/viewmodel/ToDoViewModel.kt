@@ -4,17 +4,22 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diegoribeiro.todoapp.data.ToDoDatabase
 import com.diegoribeiro.todoapp.data.models.ToDoData
 import com.diegoribeiro.todoapp.data.repository.ToDoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ToDoViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class ToDoViewModel @Inject constructor(
+    private val repository: ToDoRepository
+): ViewModel() {
 
-    private val toDoDao = ToDoDatabase.getDatabase(application).toDoDao()
-    private val repository: ToDoRepository = ToDoRepository(toDoDao)
+    
     var taskId = MutableLiveData<Int>()
 
     val getAllData: LiveData<List<ToDoData>>

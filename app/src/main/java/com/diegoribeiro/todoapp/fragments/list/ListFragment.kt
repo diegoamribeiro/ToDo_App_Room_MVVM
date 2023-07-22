@@ -27,8 +27,11 @@ import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.diegoribeiro.todoapp.utils.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
+
+@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 

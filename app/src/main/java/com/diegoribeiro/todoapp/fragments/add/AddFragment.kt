@@ -31,10 +31,13 @@ import com.diegoribeiro.todoapp.feature.TimePickerFragment
 import com.diegoribeiro.todoapp.utils.NotificationWorkManager
 import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.OffsetDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
+
+@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
@@ -104,7 +107,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
             if (deadLine.isDateReady() && deadLine.isTimeReady()) {
                 mToDoWorkManager.createWorkManager(newData.copy(id = it), view)
             } else {
-                Toast.makeText(activity?.applicationContext, "Date not set", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT)
                     .show()
             }
         }
