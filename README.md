@@ -39,6 +39,7 @@ The first update added was the Brazilian Portuguese language.
 <img alt="English" title="English" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/gb.svg" width="22"> - [English](../README.md) </br>
 <img alt="Português (Brasil)" title="Português (Brasil)" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/br.svg" width="22"> - [Português (Brasil)](README.pt_br.md)</br>
 
+- This app dones not collet any user data.
 
 
 
