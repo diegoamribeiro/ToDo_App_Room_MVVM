@@ -1,10 +1,14 @@
 package com.diegoribeiro.todoapp.fragments.list
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -26,7 +30,13 @@ import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.diegoribeiro.todoapp.utils.viewBinding
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
@@ -44,11 +54,29 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
+    private lateinit var appUpdateManager: AppUpdateManager
+    private lateinit var register: ActivityResultLauncher<IntentSenderRequest>
+    //private val UPDATE_REQUEST_CODE = 1001
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        register = registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            val resultCode = result.resultCode
+            val intent = result.data
+            if (resultCode != Activity.RESULT_OK){
+                println("Something went wrong!")
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+        appUpdateManager = AppUpdateManagerFactory.create(requireContext())
 
 
         binding.floatingActionButton.setOnClickListener {
@@ -66,7 +94,40 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         //Set menu
         setHasOptionsMenu(true)
+        checkForAppUpdates()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateInProgress()
+    }
+
+    private fun checkForAppUpdates() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            println("Check for updates")
+            if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE){// && info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                appUpdateManager.startUpdateFlowForResult(
+                    info,
+                    register,
+                    AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
+                )
+            }
+        }
+    }
+
+    private fun updateInProgress() {
+        // Quando o usuário permite a atualização e fecha o app, a atualização continua background
+        // Caso o usuário abra o app novamente, essa função irá checar o status para retomar de onde parou.
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { updateInfo ->
+            if (updateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+                appUpdateManager.startUpdateFlowForResult(
+                    updateInfo,
+                    register,
+                    AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
+                )
+            }
+        }
     }
 
 

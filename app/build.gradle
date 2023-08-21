@@ -12,11 +12,11 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.diegoribeiro.todoapp"
+        applicationId "com.diegoribeiro.newtodoapp"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 4
-        versionName "3.1"
+        versionCode 11
+        versionName "4.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -86,6 +86,8 @@ dependencies {
     //RecyclerView Animation
     implementation "jp.wasabeef:recyclerview-animators:4.0.2"
 
+    // Check for updates
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
 
 
 
