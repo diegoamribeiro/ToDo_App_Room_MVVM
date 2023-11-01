@@ -62,4 +62,25 @@
         app:layout_constraintEnd_toEndOf="@+id/recyclerListView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/no_data_imageView" />
+
+    <ImageButton
+        android:id="@+id/bt_zap"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_calendar_black"
+        android:background="@color/translucent"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
+
+    <ImageView
+        android:id="@+id/iv_overlay_with_hole"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

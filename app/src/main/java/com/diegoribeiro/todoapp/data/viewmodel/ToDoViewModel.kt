@@ -19,6 +19,17 @@ class ToDoViewModel @Inject constructor(
     private val repository: ToDoRepository
 ): ViewModel() {
 
+    private var _showReviewDialog = MutableLiveData<Boolean>()
+    val showReviewDialog: LiveData<Boolean> = _showReviewDialog
+
+    fun checkIfShouldShowFeedback() {
+        _showReviewDialog.value = repository.shouldShowFeedbackDialog()
+    }
+
+    fun updateDialogShown() {
+        repository.updateTimeReviewDialog()
+    }
+
     
     var taskId = MutableLiveData<Int>()
 

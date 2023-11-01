@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.diegoribeiro.todoapp.MainActivity
 import com.diegoribeiro.todoapp.R
 import com.diegoribeiro.todoapp.data.ToDoConstants
 import com.diegoribeiro.todoapp.data.models.ToDoData
@@ -94,8 +95,8 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
             newData = ToDoData(0, mTitle, mSharedViewModel
                     .parseIntToPriority(mPriority), mDescription, mSharedViewModel.setDeadLine(deadLine))
             mToDoViewModel.insert(newData)
-
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
+            mToDoViewModel.checkIfShouldShowFeedback()
             Toast.makeText(requireContext(), R.string.saved_successfully, Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), R.string.please_fill_all_fields, Toast.LENGTH_SHORT).show()
@@ -103,12 +104,18 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDi
     }
 
     private fun setupObserver(view: View){
-        mToDoViewModel.taskId.observe(requireActivity()) {
+        mToDoViewModel.taskId.observe(viewLifecycleOwner) {
             if (deadLine.isDateReady() && deadLine.isTimeReady()) {
                 mToDoWorkManager.createWorkManager(newData.copy(id = it), view)
             } else {
                 Toast.makeText(requireContext(), "Date not set", Toast.LENGTH_SHORT)
                     .show()
+            }
+        }
+        mToDoViewModel.showReviewDialog.observe(requireActivity()){showDialog->
+            if (showDialog){
+                (activity as? MainActivity)?.showReviewDialog()
+                mToDoViewModel.updateDialogShown()
             }
         }
     }

@@ -2,10 +2,21 @@ package com.diegoribeiro.todoapp.fragments.list
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,7 +25,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,13 +40,13 @@ import com.diegoribeiro.todoapp.utils.ToDoWorkManager
 import com.diegoribeiro.todoapp.utils.hideKeyboard
 import com.diegoribeiro.todoapp.utils.observeOnce
 import com.diegoribeiro.todoapp.utils.viewBinding
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
@@ -54,12 +64,27 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mToDoWorkManager = ToDoWorkManager(WorkManager.getInstance())
 
-    private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var register: ActivityResultLauncher<IntentSenderRequest>
+    private lateinit var appUpdateManager: AppUpdateManager
+    private var isUpdateDialogShown = false
     //private val UPDATE_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("***OnCreate", "$isUpdateDialogShown")
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isUpdateDialogShown) {
+                    Log.d("***OnCreate", "$isUpdateDialogShown")
+                    activity?.finishAffinity()
+                } else {
+                    isEnabled = false  // Desabilita esse callback
+                    requireActivity().onBackPressedDispatcher.onBackPressed()  // Chama o comportamento padrão do botão de voltar usando o onBackPressedDispatcher
+                }
+            }
+        })
+
         register = registerForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()
         ) { result ->
@@ -78,7 +103,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         // Inflate the layout for this fragment
         appUpdateManager = AppUpdateManagerFactory.create(requireContext())
 
-
         binding.floatingActionButton.setOnClickListener {
             NavHostFragment.findNavController(this).navigate(R.id.action_listFragment_to_addFragment)
         }
@@ -91,11 +115,18 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         //Hide Keyboard
         hideKeyboard(requireActivity())
+        //showReviewDialog(requireActivity())
 
         //Set menu
         setHasOptionsMenu(true)
-        checkForAppUpdates()
+        showFeedBackDialog()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        appUpdateManager = AppUpdateManagerFactory.create(requireContext())
+        checkForAppUpdates()
     }
 
     override fun onResume() {
@@ -107,6 +138,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             println("Check for updates")
             if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE){// && info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                isUpdateDialogShown = true
+                Log.d("***checkForAppUpdates", "$isUpdateDialogShown")
                 appUpdateManager.startUpdateFlowForResult(
                     info,
                     register,
@@ -117,8 +150,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun updateInProgress() {
-        // Quando o usuário permite a atualização e fecha o app, a atualização continua background
-        // Caso o usuário abra o app novamente, essa função irá checar o status para retomar de onde parou.
         appUpdateManager.appUpdateInfo.addOnSuccessListener { updateInfo ->
             if (updateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
                 appUpdateManager.startUpdateFlowForResult(
@@ -218,6 +249,17 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 listAdapter.setData(it)
             }
         })
+    }
+
+    private fun showFeedBackDialog() {
+        val reviewManager = ReviewManagerFactory.create(requireContext())
+        //val reviewManager = FakeReviewManager(requireContext())
+        reviewManager.requestReviewFlow().addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                Log.d("***Task", task.result.toString())
+                reviewManager.launchReviewFlow(requireActivity(), task.result)
+            }
+        }
     }
 
     private fun confirmRemoval(){

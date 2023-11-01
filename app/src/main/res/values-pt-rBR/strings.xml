@@ -39,6 +39,8 @@
     <string name="all_items_removed">Todos os itens foram removidos</string>
     <!--"Please fill all fields"-->
     <string name="please_fill_all_fields">Por favor, preencha todos os campos</string>
+    <string name="label_release_message">O aplicativo tem uma nova atualização disponível!\nAtualize já e aproveite as melhorias!</string>
+
 
     <!-- View By -->
     <string name="view_by">Vizualizar</string>

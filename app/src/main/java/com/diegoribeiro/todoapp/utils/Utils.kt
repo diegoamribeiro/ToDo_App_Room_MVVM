@@ -3,12 +3,14 @@ package com.diegoribeiro.todoapp.utils
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.diegoribeiro.todoapp.data.models.ToDoDateTime
+import com.google.android.play.core.review.ReviewManagerFactory
 import java.time.OffsetDateTime
 import kotlin.random.Random
 
